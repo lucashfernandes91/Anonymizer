@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Muitas requisições — Anonymizer</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Manrope:wght@400;500&display=swap" media="print" onload="this.media='all'">
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'anonymizer/css/home.css' %}">
+		<style>
+			.error-page {
+				min-height: 100vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 24px;
+				text-align: center;
+			}
+			.error-inner {
+				max-width: 480px;
+			}
+			.error-code {
+				font-family: 'Plus Jakarta Sans', sans-serif;
+				font-size: 6rem;
+				font-weight: 800;
+				letter-spacing: -0.04em;
+				line-height: 1;
+				background: linear-gradient(135deg, #3b6ff5, #7c3aed);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				margin-bottom: 16px;
+			}
+			.error-title {
+				font-family: 'Plus Jakarta Sans', sans-serif;
+				font-size: 1.5rem;
+				font-weight: 800;
+				letter-spacing: -0.02em;
+				color: var(--text);
+				margin-bottom: 12px;
+			}
+			.error-desc {
+				font-size: 1rem;
+				color: #a8b8d0;
+				line-height: 1.7;
+				margin-bottom: 32px;
+			}
+			.error-timer {
+				font-family: 'Plus Jakarta Sans', sans-serif;
+				font-size: 1.8rem;
+				font-weight: 800;
+				color: var(--text);
+				margin-bottom: 8px;
+			}
+			.error-timer-label {
+				font-size: 0.85rem;
+				color: #7a8aaa;
+				margin-bottom: 32px;
+				letter-spacing: 0.06em;
+				text-transform: uppercase;
+			}
+			.error-btn {
+				display: inline-flex;
+				align-items: center;
+				gap: 8px;
+				background: linear-gradient(135deg, #3b6ff5, #7c3aed);
+				color: #fff;
+				padding: 14px 32px;
+				border-radius: 12px;
+				font-family: 'Plus Jakarta Sans', sans-serif;
+				font-size: 0.95rem;
+				font-weight: 700;
+				text-decoration: none;
+				transition: opacity 0.2s;
+				cursor: not-allowed;
+				opacity: 0.5;
+			}
+			.error-btn.ready {
+				cursor: pointer;
+				opacity: 1;
+			}
+			.error-note {
+				margin-top: 16px;
+				font-size: 0.82rem;
+				color: #7a8aaa;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="orb orb-1"></div>
+		<div class="orb orb-2"></div>
+
+		<nav>
+			<a href="/" class="logo">Anony<span>mizer</span></a>
+		</nav>
+
+		<div class="error-page">
+			<div class="error-inner">
+				<div class="error-code">429</div>
+				<div class="error-title">Calma aí — muitas requisições</div>
+				<p class="error-desc">
+					Você enviou imagens demais em pouco tempo.<br>
+					Aguarde um momento e tente novamente.
+				</p>
+
+				<div class="error-timer" id="timer">60</div>
+				<div class="error-timer-label">segundos para liberar</div>
+
+				<a href="/" class="error-btn" id="btn" aria-disabled="true">
+					🔄 Tentar novamente
+				</a>
+				<p class="error-note">O limite é de 10 imagens por minuto.</p>
+			</div>
+		</div>
+
+		<script>
+			let seconds = 60;
+			const timer = document.getElementById('timer');
+			const btn = document.getElementById('btn');
+
+			const interval = setInterval(() => {
+				seconds--;
+				timer.textContent = seconds;
+				if (seconds <= 0) {
+					clearInterval(interval);
+					timer.textContent = '0';
+					btn.classList.add('ready');
+					btn.removeAttribute('aria-disabled');
+				}
+			}, 1000);
+		</script>
+	</body>
+</html>

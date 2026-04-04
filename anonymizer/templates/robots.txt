@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+
+# Sitemap
+Sitemap: https://anonymizer.com.br/sitemap.xml
+
+# Arquivo para agentes de IA
+# https://anonymizer.com.br/llms.txt

@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- ─── SEO BÁSICO ─── -->
+	<title>Anonymizer — Remova metadados e GPS das suas imagens gratuitamente</title>
+	<meta name="description" content="Remova metadados EXIF, localização GPS, modelo do dispositivo e histórico oculto das suas imagens. Grátis, sem cadastro, processamento instantâneo.">
+	<meta name="keywords" content="remover metadados, remover EXIF, remover GPS foto, anonimizar imagem, privacidade foto, limpar metadados imagem">
+	<meta name="author" content="Anonymizer">
+	<meta name="robots" content="index, follow">
+	<link rel="canonical" href="https://anonymizer.com.br/">
+
+	<!-- ─── OPEN GRAPH (WhatsApp, Facebook, LinkedIn) ─── -->
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://anonymizer.com.br/">
+	<meta property="og:title" content="Anonymizer — Remova metadados e GPS das suas imagens">
+	<meta property="og:description" content="Sua foto pode estar revelando onde você mora. Remova GPS, dispositivo e histórico oculto em segundos. Grátis e sem cadastro.">
+	<meta property="og:image" content="https://anonymizer.com.br/static/anonymizer/img/og-image.png">
+	<meta property="og:locale" content="pt_BR">
+	<meta property="og:site_name" content="Anonymizer">
+
+	<!-- ─── TWITTER CARD ─── -->
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="Anonymizer — Remova metadados e GPS das suas imagens">
+	<meta name="twitter:description" content="Sua foto pode estar revelando onde você mora. Remova GPS, dispositivo e histórico oculto em segundos.">
+	<meta name="twitter:image" content="https://anonymizer.com.br/static/anonymizer/img/og-image.png">
+
+	<!-- ─── JSON-LD SCHEMA (para IAs e motores de busca) ─── -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"name": "Anonymizer",
+		"url": "https://anonymizer.com.br",
+		"description": "Ferramenta gratuita para remover metadados EXIF e localização GPS de imagens. Reconstrói a imagem do zero em RGB puro, garantindo anonimização total e irreversível.",
+		"applicationCategory": "UtilitiesApplication",
+		"operatingSystem": "Web",
+		"browserRequirements": "Requires JavaScript",
+		"inLanguage": "pt-BR",
+		"isAccessibleForFree": true,
+		"offers": {
+			"@type": "Offer",
+			"price": "0",
+			"priceCurrency": "BRL"
+		},
+		"featureList": [
+			"Remoção de GPS e localização",
+			"Remoção de metadados EXIF",
+			"Reconstrução RGB pixel a pixel",
+			"Sem cadastro necessário",
+			"Processamento instantâneo"
+		],
+		"publisher": {
+			"@type": "Organization",
+			"name": "Anonymizer",
+			"url": "https://anonymizer.com.br"
+		}
+	}
+	</script>
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Manrope:wght@400;500&display=swap">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Manrope:wght@400;500&display=swap" media="print" onload="this.media='all'">
+	<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Manrope:wght@400;500&display=swap"></noscript>
+	{% load static %}
+	<link rel="stylesheet" href="{% static 'anonymizer/css/home.css' %}">
+</head>
+<body>
+
+	<div class="orb orb-1"></div>
+	<div class="orb orb-2"></div>
+
+	<!-- NAV -->
+	<nav>
+		<a href="https://anonymizer.com.br/" class="logo">Anony<span>mizer</span></a>
+		<div class="nav-links" id="nav-links">
+			<a href="#upload"     class="nav-link">Upload</a>
+			<a href="#problema"   class="nav-link">O problema</a>
+			<a href="#publico"    class="nav-link">Para quem</a>
+			<a href="#como"       class="nav-link">Como funciona</a>
+			<a href="#tecnologia" class="nav-link">Tecnologia</a>
+			<a href="#beneficios" class="nav-link">Benefícios</a>
+		</div>
+		<div class="nav-right">
+			<button class="nav-mobile-toggle" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
+			<a href="#upload" class="nav-cta">Limpar imagem →</a>
+		</div>
+	</nav>
+
+	<!-- HERO -->
+	<section class="hero" id="upload">
+		<div class="badge" fetchpriority="high">
+			<span class="badge-dot"></span>
+			Privacidade para todos. Grátis.
+		</div>
+
+		<h1>Remova tudo que sua<br>imagem <em>revela</em> — agora.</h1>
+
+		<p class="hero-sub">
+			Sua foto carrega localização GPS, modelo do celular, data e hora. Invisível para você. Visível para qualquer um que queira rastrear.
+		</p>
+
+		<!-- DROP ZONE -->
+		<div class="drop-wrapper">
+			<div id="drop-area" class="drop-area">
+				<span class="drop-icon">🛡️</span>
+				<div class="drop-title">Arraste sua imagem aqui</div>
+				<p class="drop-hint">JPG, PNG, HEIC — processamento automático e instantâneo</p>
+				<button class="drop-btn" type="button" onclick="document.getElementById('fileElem').click()">
+					⚡ Selecionar imagem e limpar
+				</button>
+				<div class="drop-meta">
+					<span>🔒 Sem cadastro</span>
+					<span>⚡ Processamento local</span>
+					<span>🗑️ Sem armazenamento</span>
+				</div>
+			</div>
+
+			<!-- Formulário real (Django) -->
+			<form id="uploadForm" method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<input type="file" name="image" id="fileInput" hidden>
+			</form>
+			<input type="file" id="fileElem" accept="image/*" hidden>
+		</div>
+	</section>
+
+	<!-- TRUST BAR -->
+	<div class="trust-bar">
+		<div class="trust-item">
+			<span class="trust-emoji">🔒</span>
+			<strong>100%</strong>
+			Privado
+		</div>
+		<div class="trust-item">
+			<span class="trust-emoji">🧹</span>
+			<strong>Zero</strong>
+			Metadados
+		</div>
+		<div class="trust-item">
+			<span class="trust-emoji">📍</span>
+			<strong>GPS</strong>
+			Removido
+		</div>
+		<div class="trust-item">
+			<span class="trust-emoji">⚡</span>
+			<strong>&lt; 3s</strong>
+			Processamento
+		</div>
+		<div class="trust-item">
+			<span class="trust-emoji">🆓</span>
+			<strong>Grátis</strong>
+			Sem cadastro
+		</div>
+	</div>
+
+	<!-- ═══ BLOCO 1: CHOQUE — O GATILHO ═══ -->
+	{% if not original %}
+	<section class="choque-section">
+		<div class="choque-inner">
+			<div class="choque-text">
+				<div class="section-label">⚠️ O risco que você não vê</div>
+				<h2>Alguém já sabe onde você mora — pela sua última foto de produto.</h2>
+				<p>Toda imagem tirada pelo celular carrega as coordenadas GPS de onde foi capturada. Embutido no arquivo. Invisível na tela. Mas qualquer pessoa com dois cliques consegue extrair e abrir no mapa.</p>
+				<a href="#upload" class="choque-cta">🔍 Ver o que minha imagem revela →</a>
+			</div>
+			<div class="choque-terminal">
+				<div class="terminal-bar">
+					<div class="t-dot r"></div>
+					<div class="t-dot y"></div>
+					<div class="t-dot g"></div>
+					<span class="terminal-title">exif_extract — foto_produto_celular.jpg</span>
+				</div>
+				<div class="terminal-body">
+					<div class="t-line"><span class="t-label">$ </span><span class="t-white">exiftool foto_produto_celular.jpg</span></div>
+					<div class="t-line"><span class="t-label">──────────────────────────────</span></div>
+					<div class="t-line"><span class="t-label">GPS Latitude    : </span><span class="t-red">-23° 33' 12.4" S</span></div>
+					<div class="t-line"><span class="t-label">GPS Longitude   : </span><span class="t-red">-46° 39' 48.2" W</span></div>
+					<div class="t-line"><span class="t-label">Make            : </span><span class="t-yellow">Samsung</span></div>
+					<div class="t-line"><span class="t-label">Model           : </span><span class="t-yellow">Galaxy S23 Ultra</span></div>
+					<div class="t-line"><span class="t-label">Date/Time       : </span><span class="t-yellow">2025:03:22 09:14:03</span></div>
+					<div class="t-line"><span class="t-label">Software        : </span><span class="t-yellow">Android 14 / Camera 10.1</span></div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	{% endif %}
+	<!-- RESULT AREA (Django template) -->
+	<div id="result-area" {% if original %}class="result-area-wrap" data-has-result="true"{% else %}data-has-result="false"{% endif %}>
+		{% if original %}
+
+
+
+
+
+			{% if lat is not None and lon is not None %}
+			<div class="gps-block">
+
+				<!-- Cabeçalho de alerta GPS -->
+				<div class="gps-header">
+					<div class="gps-header-icon">📍</div>
+					<div>
+						<div class="gps-header-title">Localização exposta — qualquer pessoa poderia saber onde você estava</div>
+						<div class="gps-header-sub">Coordenadas GPS encontradas nos metadados da imagem e removidas com sucesso.</div>
+					</div>
+				</div>
+
+				<!-- Endereço detalhado -->
+				{% if endereco %}
+				<div class="gps-address">
+					{% if endereco.rua %}
+					<div class="gps-row">
+						<span class="gps-label">Rua</span>
+						<span class="gps-value gps-value-rua">{{ endereco.rua }}{% if endereco.numero and endereco.numero != 's/n' %}, {{ endereco.numero }}{% endif %}</span>
+						<a href="https://www.google.com/maps?q={{ lat }},{{ lon }}" target="_blank" class="gps-maps-btn">📍 Ver no Maps</a>
+					</div>
+					{% endif %}
+					{% if endereco.bairro %}
+					<div class="gps-row">
+						<span class="gps-label">Bairro</span>
+						<span class="gps-value">{{ endereco.bairro }}</span>
+					</div>
+					{% endif %}
+					<div class="gps-row">
+						<span class="gps-label">Cidade</span>
+						<span class="gps-value">{{ endereco.cidade }}{% if endereco.estado %} — {{ endereco.estado }}{% endif %}</span>
+					</div>
+					<div class="gps-row {% if endereco.cep %}gps-row-border{% endif %}">
+						<span class="gps-label">País</span>
+						<span class="gps-value">{{ endereco.pais }}</span>
+					</div>
+					{% if endereco.cep %}
+					<div class="gps-row">
+						<span class="gps-label">CEP</span>
+						<span class="gps-value">{{ endereco.cep }}</span>
+					</div>
+					{% endif %}
+				</div>
+				{% endif %}
+
+				<!-- Rodapé: dispositivo, data/hora, coords, link maps -->
+				<div class="gps-footer">
+
+					<!-- Dispositivo -->
+					{% if exif.Make or exif.Model %}
+					<div class="gps-info-row">
+						<span class="gps-icon">📱</span>
+						<div>
+							<div class="gps-info-label">Dispositivo identificado</div>
+							<div class="gps-info-value">{{ exif.Make }} {{ exif.Model }}</div>
+						</div>
+					</div>
+					{% endif %}
+
+					<!-- Data/hora -->
+					{% if exif.DateTimeOriginal %}
+					<div class="gps-info-row">
+						<span class="gps-icon">🕒</span>
+						<div>
+							<div class="gps-info-label">Foto tirada em</div>
+							<div class="gps-info-value">{{ exif.DateTimeOriginal }}</div>
+						</div>
+					</div>
+					{% endif %}
+
+					<!-- Total de metadados removidos -->
+					{% if metadados %}
+					<div class="gps-info-row">
+						<span class="gps-icon">🧹</span>
+						<div>
+							<div class="gps-info-label">Informações ocultas removidas</div>
+							<div class="gps-info-value"><span class="gps-count">{{ metadados|length }}</span> campos apagados permanentemente</div>
+						</div>
+					</div>
+					{% endif %}
+
+				</div>
+
+			</div>
+			{% endif %}
+
+			<div class="result-header">
+				<div class="result-header-title">✅ Imagem <span>limpa e pronta</span></div>
+				<div class="result-actions">
+					<a href="/" class="btn-nova">🔄 Limpar nova imagem</a>
+					<a href="data:image/jpeg;base64,{{ anon }}" download="imagem_anonimizada.jpg" class="btn-download-big">⬇️ Baixar imagem limpa</a>
+				</div>
+			</div>
+
+			<div class="result-grid">
+				<div class="result-card">
+					<h3>⚠️ Original — com metadados expostos</h3>
+					<img src="data:image/jpeg;base64,{{ original }}" alt="Original">
+				</div>
+				<div class="result-card clean">
+					<h3>🛡️ Anonimizada — zero rastros</h3>
+					<img src="data:image/jpeg;base64,{{ anon }}" alt="Anonimizada">
+					<a href="data:image/jpeg;base64,{{ anon }}" download="imagem_anonimizada.jpg" class="btn-download-big btn-download-full">⬇️ Baixar imagem limpa</a>
+				</div>
+			</div>
+
+			<div class="meta-table">
+				{% if metadados %}
+					<h3>🧹 Metadados removidos — Análise de risco</h3>
+					<ul>
+						{% for item in metadados %}
+						<li><b>{{ item.criticidade }}</b> → {{ item.tag }}: {{ item.valor|truncatechars:120 }}</li>
+						{% endfor %}
+					</ul>
+				{% else %}
+					<p class="meta-empty">Nenhum metadado encontrado na imagem original.</p>
+				{% endif %}
+			</div>
+
+			<div class="result-share">
+				<div class="result-share-text">
+					<strong>Conhece alguém que precisa saber disso?</strong>
+					Vendedores, criadores de conteúdo, profissionais — qualquer um que poste fotos online está exposto.
+				</div>
+				<button class="btn-share" onclick="navigator.share ? navigator.share({title:'Anonymizer',text:'Remova metadados e GPS das suas imagens antes de postar',url:'https://anonymizer.com.br'}) : window.open('https://wa.me/?text=Remova+metadados+e+GPS+das+suas+fotos+antes+de+postar+%F0%9F%94%92+https://anonymizer.com.br','_blank')">📤 Compartilhar ferramenta</button>
+			</div>
+
+		{% endif %}
+	</div>
+
+	<!-- PROBLEM SECTION -->
+	<section id="problema">
+		<div class="container">
+			<div class="section-label">O problema</div>
+			<h2 class="section-title">Sua imagem revela mais do que você imagina.</h2>
+			<p class="section-sub">Toda foto tirada pelo seu celular ou câmera carrega dados ocultos — os metadados EXIF. Eles ficam embutidos invisívelmente no arquivo.</p>
+
+			<div class="problem-grid">
+				<div class="meta-card">
+					<div class="risk-tag">Alto risco</div>
+					<div class="icon">📍</div>
+					<h4>Localização GPS exata</h4>
+					<p>Latitude e longitude precisas de onde a foto foi tirada. Qualquer pessoa pode abrir o mapa e ir até lá.</p>
+				</div>
+				<div class="meta-card">
+					<div class="risk-tag">Risco médio</div>
+					<div class="icon">📱</div>
+					<h4>Modelo do dispositivo</h4>
+					<p>Fabricante, modelo e número de série do celular ou câmera. Pode ser usado para identificação de perfil.</p>
+				</div>
+				<div class="meta-card">
+					<div class="risk-tag">Risco médio</div>
+					<div class="icon">🕒</div>
+					<h4>Data e hora exata</h4>
+					<p>Quando a foto foi tirada, com precisão de segundos. Pode comprometer álibi ou rotina diária.</p>
+				</div>
+				<div class="meta-card">
+					<div class="risk-tag">Risco médio</div>
+					<div class="icon">👤</div>
+					<h4>Identificadores únicos</h4>
+					<p>IDs internos e informações do software de edição que permitem rastrear o histórico do arquivo.</p>
+				</div>
+			</div>
+
+			<div class="problem-visual">
+				<div class="pv-text">
+					<h3>Invisível a olho nu — mas exposto para quem sabe onde procurar.</h3>
+					<p>Qualquer pessoa com uma ferramenta gratuita consegue extrair todos esses dados da sua imagem em segundos. Jornalistas, hackers, stalkers — todos sabem disso.</p>
+				</div>
+				<div class="pv-img">
+					<div><span class="hi">GPS Latitude:</span> -23.5505° S</div>
+					<div><span class="hi">GPS Longitude:</span> -46.6333° W</div>
+					<div><span class="hi">Device:</span> iPhone 15 Pro</div>
+					<div><span class="hi">DateTime:</span> 2024:01:15 08:32:11</div>
+					<div><span class="hi">Software:</span> Adobe Lightroom 7.0</div>
+					<div><span class="ok">→ Removido com Anonymizer</span></div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ═══ BLOCO 2: PARA QUEM É ISSO ═══ -->
+	<section class="publico-section" id="publico">
+		<div class="container">
+			<div class="section-label">Para quem é isso</div>
+			<h2 class="section-title">Você se encaixa em um desses perfis?</h2>
+			<p class="section-sub">O risco é o mesmo para todos — mas as consequências mudam dependendo de quem você é.</p>
+
+			<div class="publico-grid">
+				<div class="publico-card">
+					<span class="publico-icon">🛒</span>
+					<div class="publico-tag">Vendedor online</div>
+					<h4>Você vende no Mercado Livre, OLX ou Instagram?</h4>
+					<p>Cada foto de produto tirada em casa inclui as coordenadas exatas da sua residência. Qualquer comprador — ou pessoa mal intencionada — consegue ver isso.</p>
+					<div class="publico-risco">⚠️ Risco: exposição do seu endereço residencial para estranhos.</div>
+				</div>
+				<div class="publico-card">
+					<span class="publico-icon">📱</span>
+					<div class="publico-tag">Criador de conteúdo</div>
+					<h4>Você posta fotos no Instagram, TikTok ou YouTube?</h4>
+					<p>Imagens postadas com metadados intactos revelam sua rotina, os locais que você frequenta e o dispositivo que você usa. Seguidores mal intencionados podem cruzar esses dados.</p>
+					<div class="publico-risco">⚠️ Risco: rastreamento de rotina e localização habitual.</div>
+				</div>
+				<div class="publico-card">
+					<span class="publico-icon">🔏</span>
+					<div class="publico-tag">Profissional</div>
+					<h4>Você é jornalista, advogado ou profissional de saúde?</h4>
+					<p>Imagens de fontes, clientes ou pacientes trocadas por e-mail ou WhatsApp carregam dados que podem comprometer sigilo profissional e violar a LGPD.</p>
+					<div class="publico-risco">⚠️ Risco: violação de sigilo e responsabilidade legal.</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- HOW IT WORKS -->
+	<section class="how-section" id="como">
+		<div class="container">
+			<div class="section-label">Como funciona</div>
+			<h2 class="section-title">3 segundos. Zero rastros.</h2>
+			<p class="section-sub">O processo é projetado para ser absolutamente simples — sem configuração, sem cadastro.</p>
+
+			<div class="steps">
+				<div class="step">
+					<div class="step-num">01</div>
+					<span class="step-icon">📂</span>
+					<h4>Arraste ou selecione</h4>
+					<p>Solte qualquer imagem na área de upload. JPG, PNG ou HEIC — tudo aceito.</p>
+				</div>
+				<div class="step">
+					<div class="step-num">02</div>
+					<span class="step-icon">⚙️</span>
+					<h4>Reconstrução automática</h4>
+					<p>Nossa tecnologia reconstrói a imagem do zero em RGB puro. Nenhum dado original é reutilizado.</p>
+				</div>
+				<div class="step">
+					<div class="step-num">03</div>
+					<span class="step-icon">✅</span>
+					<h4>Baixe limpa e segura</h4>
+					<p>Receba uma imagem visualmente idêntica, mas sem nenhum metadado. Pronta para enviar.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- TECH / DIFFERENTIALS -->
+	<section id="tecnologia">
+		<div class="container">
+			<div class="section-label">Tecnologia</div>
+			<h2 class="section-title">Não removemos metadados. Recriamos sua imagem.</h2>
+
+			<div class="tech-grid">
+				<div>
+					<p class="tech-p tech-p-bright">
+						A diferença é fundamental. Outras ferramentas apenas deletam os campos EXIF. A nossa reconstrói o arquivo completo — pixel por pixel.
+					</p>
+					<p class="tech-p">
+						A maioria das ferramentas apenas "apaga" os metadados — o que pode deixar rastros ou ser revertido com softwares forenses. Nossa abordagem é diferente na raiz.
+					</p>
+					<p class="tech-p">
+						Não editamos o arquivo original. <strong class="tech-strong">Geramos um arquivo completamente novo</strong>, pixel por pixel, em RGB puro — sem nenhuma estrutura interna reaproveitada.
+					</p>
+					<p class="tech-p">
+						Isso significa que não existe "desfazer". O vínculo entre a imagem nova e a original é <strong class="tech-strong">tecnicamente inexistente</strong>.
+					</p>
+				</div>
+				<div class="tech-vis">
+					<div class="flow-step">
+						<div class="flow-icon red">⚠️</div>
+						<div class="flow-text">
+							<h5>Imagem original recebida</h5>
+							<p>Com todos os metadados EXIF intactos</p>
+						</div>
+					</div>
+					<div class="arrow-down">↓</div>
+					<div class="flow-step">
+						<div class="flow-icon blue">🔬</div>
+						<div class="flow-text">
+							<h5>Extração apenas dos pixels</h5>
+							<p>Apenas a informação visual é lida</p>
+						</div>
+					</div>
+					<div class="arrow-down">↓</div>
+					<div class="flow-step">
+						<div class="flow-icon blue">⚙️</div>
+						<div class="flow-text">
+							<h5>Reconstrução em RGB puro</h5>
+							<p>Nova estrutura de arquivo gerada do zero</p>
+						</div>
+					</div>
+					<div class="arrow-down">↓</div>
+					<div class="flow-step">
+						<div class="flow-icon green">✅</div>
+						<div class="flow-text">
+							<h5>Nova imagem limpa</h5>
+							<p>Zero histórico, zero metadados, zero rastros</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- BENEFITS -->
+	<section class="section-alt" id="beneficios">
+		<div class="container">
+			<div class="section-label">Benefícios</div>
+			<h2 class="section-title">Por que usar o Anonymizer?</h2>
+
+			<div class="benefits-grid">
+				<div class="benefit">
+					<span class="icon">🔒</span>
+					<h4>Privacidade total</h4>
+					<p>Nenhuma informação pessoal sobrevive no arquivo. Nem localização, nem dispositivo, nem horário.</p>
+				</div>
+				<div class="benefit">
+					<span class="icon">🧩</span>
+					<h4>Compartilhe com segurança</h4>
+					<p>Poste em marketplaces, redes sociais ou envie por WhatsApp sem expor dados pessoais invisíveis.</p>
+				</div>
+				<div class="benefit">
+					<span class="icon">📍</span>
+					<h4>GPS removido</h4>
+					<p>Nenhuma coordenada geográfica sobrevive. Compartilhe fotos sem expor onde você estava.</p>
+				</div>
+				<div class="benefit">
+					<span class="icon">⚡</span>
+					<h4>Instantâneo</h4>
+					<p>O processamento leva segundos. Sem filas, sem espera, sem limite de uso.</p>
+				</div>
+				<div class="benefit">
+					<span class="icon">🆓</span>
+					<h4>Gratuito e sem cadastro</h4>
+					<p>Sem conta, sem email, sem assinatura. Arraste, processe e baixe.</p>
+				</div>
+				<div class="benefit">
+					<span class="icon">📁</span>
+					<h4>Nova identidade digital</h4>
+					<p>Cada imagem processada recebe uma estrutura interna completamente nova e irrerastreável.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ═══ MANIFESTO ═══ -->
+	<section class="manifesto-section">
+		<div class="manifesto-inner">
+			<div class="manifesto-quote">"Privacidade é um direito. Não um produto. Por isso criei o Anonymizer — para devolver isso a qualquer pessoa, de graça."</div>
+			<div class="manifesto-author">
+				<div class="manifesto-avatar">LHF</div>
+				<div class="manifesto-author-info">
+					<div class="manifesto-author-name">Lucas H. Fernandes</div>
+					<div class="manifesto-author-role">Criador do Anonymizer</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ═══ BLOCO 3: CREDIBILIDADE ═══ -->
+	<section class="cred-section">
+		<div class="container">
+			<div class="section-label">Credibilidade</div>
+			<h2 class="section-title">Quem já usa sabe a diferença.</h2>
+
+			<div class="cred-grid">
+				<div class="cred-card">
+					<div class="cred-stars">★★★★★</div>
+					<p class="cred-quote">Vendo no Mercado Livre há 3 anos e nunca soube que minhas fotos tinham meu endereço. Rodei a ferramenta nas últimas 200 fotos em minutos.</p>
+					<div class="cred-author">
+						<div class="cred-avatar">🛒</div>
+						<div>
+							<div class="cred-name">Marcos T.</div>
+							<div class="cred-role">Vendedor online · São Paulo, SP</div>
+						</div>
+					</div>
+				</div>
+				<div class="cred-card">
+					<div class="cred-stars">★★★★★</div>
+					<p class="cred-quote">Trabalho com comunicação e proteção de fontes. Essa ferramenta virou parte do meu fluxo antes de publicar qualquer material visual.</p>
+					<div class="cred-author">
+						<div class="cred-avatar">📰</div>
+						<div>
+							<div class="cred-name">Ana C.</div>
+							<div class="cred-role">Jornalista freelancer · Rio de Janeiro, RJ</div>
+						</div>
+					</div>
+				</div>
+				<div class="cred-card">
+					<div class="cred-stars">★★★★★</div>
+					<p class="cred-quote">Simples, rápido, sem cadastro. Testei com uma foto minha e apareceu o GPS do consultório. Agora processo tudo antes de mandar por WhatsApp.</p>
+					<div class="cred-author">
+						<div class="cred-avatar">🩺</div>
+						<div>
+							<div class="cred-name">Dr. Felipe R.</div>
+							<div class="cred-role">Médico · Curitiba, PR</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="cred-numbers">
+				<div class="cred-num">
+					<div class="cred-num-val">
+						{% if total_imagens >= 1000 %}
+							+{{ total_imagens|floatformat:0 }}
+						{% else %}
+							{{ total_imagens }}
+						{% endif %}
+					</div>
+					<div class="cred-num-label">imagens já processadas</div>
+				</div>
+				<div class="cred-num">
+					<div class="cred-num-val">
+						{% if total_acessos >= 1000 %}
+							+{{ total_acessos|floatformat:0 }}
+						{% else %}
+							{{ total_acessos }}
+						{% endif %}
+					</div>
+					<div class="cred-num-label">usuários únicos atendidos</div>
+				</div>
+				<div class="cred-num">
+					<div class="cred-num-val">0</div>
+					<div class="cred-num-label">dados armazenados nos servidores</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- FOOTER -->
+	<footer>
+		<a href="https://anonymizer.com.br/" class="footer-logo">Anony<span>mizer</span></a>
+		<div class="footer-tagline">Proteção de privacidade para todos. Grátis.</div>
+		<div class="footer-copy">© 2026 Anonymizer · anonymizer.com.br</div>
+	</footer>
+
+	<!-- SCRIPTS -->
+	<script src="{% static 'anonymizer/js/home.js' %}"></script>
+</body>
+</html>
