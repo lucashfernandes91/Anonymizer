@@ -147,18 +147,26 @@ O fluxo é propositalmente simples:
 │   ├── tests.py
 │   ├── urls.py
 │   ├── views.py
-│   └── migrations/
-│       └── __init__.py
+│   └── static/
+│   │    └── anonymizer/
+│   │       └── css/
+│   │           └── home.css
+│   │       └── js/
+│   │           └── home.js
+│   │       └── img/
+│   │           └── og-image.png
+│   └── templates/
+│       └── 429.html
+│       └── home.html
+│       └── llms.txt
+│       └── robots.txt
+│       └── sitemap.xml
 ├── core/
 │   ├── __init__.py
 │   ├── asgi.py
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py
-├── static/
-├── templates/
-│   └── home.html
-├── db.sqlite3
 ├── manage.py
 ├── pyproject.toml
 └── README.md
@@ -195,6 +203,6 @@ Este projeto está licenciado sob a licença MIT. Veja o arquivo LICENSE para ma
 
 ## 💬 Contato
 
-- **Email:** seuemail@exemplo.com
-- **LinkedIn:** [Seu Nome](https://www.linkedin.com/in/seu-perfil)
-- **GitHub:** [seu-usuario](https://github.com/seu-usuario)
+- **Email:** lucashfernandes@yahoo.com.br
+- **LinkedIn:** [Lucas H. Fernandes](https://www.linkedin.com/in/lucas-holtz/)
+- **GitHub:** [lucashfernandes91](https://github.com/lucashfernandes91)
