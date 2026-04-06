@@ -128,6 +128,34 @@
 		</div>
 	</section>
 
+	<!-- LOADER OVERLAY -->
+	<div id="loader-overlay" style="display:none; position:fixed; inset:0; background:rgba(5,7,20,0.92); z-index:9999; flex-direction:column; align-items:center; justify-content:center; gap:24px;">
+		<div style="position:relative; width:80px; height:80px;">
+			<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation:spin 1.2s linear infinite; position:absolute; inset:0;">
+				<circle cx="40" cy="40" r="34" stroke="#1e2235" stroke-width="6"/>
+				<path d="M40 6 A34 34 0 0 1 74 40" stroke="url(#loaderGrad)" stroke-width="6" stroke-linecap="round"/>
+				<defs>
+					<linearGradient id="loaderGrad" x1="40" y1="6" x2="74" y2="40" gradientUnits="userSpaceOnUse">
+						<stop offset="0%" stop-color="#7c6aff"/>
+						<stop offset="100%" stop-color="#4f8cff"/>
+					</linearGradient>
+				</defs>
+			</svg>
+			<span style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:26px;">🛡️</span>
+		</div>
+		<div style="text-align:center;">
+			<div id="loader-title" style="color:#fff; font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:1.1rem; margin-bottom:6px;">Analisando metadados…</div>
+			<div id="loader-sub" style="color:#7c8aaa; font-family:'Manrope',sans-serif; font-size:0.85rem;">Reconstruindo imagem em RGB puro</div>
+		</div>
+		<div style="width:220px; height:4px; background:#1e2235; border-radius:99px; overflow:hidden;">
+			<div id="loader-bar" style="height:100%; width:0%; background:linear-gradient(90deg,#7c6aff,#4f8cff); border-radius:99px; transition:width 0.4s ease;"></div>
+		</div>
+	</div>
+
+	<style>
+		@keyframes spin { to { transform: rotate(360deg); } }
+	</style>
+
 	<!-- TRUST BAR -->
 	<div class="trust-bar">
 		<div class="trust-item">
@@ -154,6 +182,11 @@
 			<span class="trust-emoji">🆓</span>
 			<strong>Grátis</strong>
 			Sem cadastro
+		</div>
+		<div class="trust-item">
+			<span class="trust-emoji">📊</span>
+			<strong>{% if total_imagens >= 1000 %}+{{ total_imagens|floatformat:0 }}{% else %}{{ total_imagens }}{% endif %}</strong>
+			Já processadas
 		</div>
 	</div>
 
@@ -192,11 +225,6 @@
 	<!-- RESULT AREA (Django template) -->
 	<div id="result-area" {% if original %}class="result-area-wrap" data-has-result="true"{% else %}data-has-result="false"{% endif %}>
 		{% if original %}
-
-
-
-
-
 			{% if lat is not None and lon is not None %}
 			<div class="gps-block">
 
@@ -242,7 +270,7 @@
 				</div>
 				{% endif %}
 
-				<!-- Rodapé: dispositivo, data/hora, coords, link maps -->
+				<!-- Rodapé: dispositivo, data/hora, link maps -->
 				<div class="gps-footer">
 
 					<!-- Dispositivo -->
@@ -308,7 +336,7 @@
 					<h3>🧹 Metadados removidos — Análise de risco</h3>
 					<ul>
 						{% for item in metadados %}
-						<li><b>{{ item.criticidade }}</b> → {{ item.tag }}: {{ item.valor|truncatechars:120 }}</li>
+						<li><b>{{ item.criticidade }}</b> → {{ item.tag }}: {{ item.valor|truncatechars:300 }}</li>
 						{% endfor %}
 					</ul>
 				{% else %}
@@ -543,83 +571,11 @@
 	<!-- ═══ MANIFESTO ═══ -->
 	<section class="manifesto-section">
 		<div class="manifesto-inner">
-			<div class="manifesto-quote">"Privacidade é um direito. Não um produto. Por isso criei o Anonymizer — para devolver isso a qualquer pessoa, de graça."</div>
+			<div class="manifesto-quote">"Privacidade é um direito. Não um produto. Por isso o Anonymizer existe — para garantir esse direito a qualquer pessoa, de graça."</div>
 			<div class="manifesto-author">
 				<div class="manifesto-avatar">LHF</div>
 				<div class="manifesto-author-info">
-					<div class="manifesto-author-name">Lucas H. Fernandes</div>
 					<div class="manifesto-author-role">Criador do Anonymizer</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<!-- ═══ BLOCO 3: CREDIBILIDADE ═══ -->
-	<section class="cred-section">
-		<div class="container">
-			<div class="section-label">Credibilidade</div>
-			<h2 class="section-title">Quem já usa sabe a diferença.</h2>
-
-			<div class="cred-grid">
-				<div class="cred-card">
-					<div class="cred-stars">★★★★★</div>
-					<p class="cred-quote">Vendo no Mercado Livre há 3 anos e nunca soube que minhas fotos tinham meu endereço. Rodei a ferramenta nas últimas 200 fotos em minutos.</p>
-					<div class="cred-author">
-						<div class="cred-avatar">🛒</div>
-						<div>
-							<div class="cred-name">Marcos T.</div>
-							<div class="cred-role">Vendedor online · São Paulo, SP</div>
-						</div>
-					</div>
-				</div>
-				<div class="cred-card">
-					<div class="cred-stars">★★★★★</div>
-					<p class="cred-quote">Trabalho com comunicação e proteção de fontes. Essa ferramenta virou parte do meu fluxo antes de publicar qualquer material visual.</p>
-					<div class="cred-author">
-						<div class="cred-avatar">📰</div>
-						<div>
-							<div class="cred-name">Ana C.</div>
-							<div class="cred-role">Jornalista freelancer · Rio de Janeiro, RJ</div>
-						</div>
-					</div>
-				</div>
-				<div class="cred-card">
-					<div class="cred-stars">★★★★★</div>
-					<p class="cred-quote">Simples, rápido, sem cadastro. Testei com uma foto minha e apareceu o GPS do consultório. Agora processo tudo antes de mandar por WhatsApp.</p>
-					<div class="cred-author">
-						<div class="cred-avatar">🩺</div>
-						<div>
-							<div class="cred-name">Dr. Felipe R.</div>
-							<div class="cred-role">Médico · Curitiba, PR</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="cred-numbers">
-				<div class="cred-num">
-					<div class="cred-num-val">
-						{% if total_imagens >= 1000 %}
-							+{{ total_imagens|floatformat:0 }}
-						{% else %}
-							{{ total_imagens }}
-						{% endif %}
-					</div>
-					<div class="cred-num-label">imagens já processadas</div>
-				</div>
-				<div class="cred-num">
-					<div class="cred-num-val">
-						{% if total_acessos >= 1000 %}
-							+{{ total_acessos|floatformat:0 }}
-						{% else %}
-							{{ total_acessos }}
-						{% endif %}
-					</div>
-					<div class="cred-num-label">usuários únicos atendidos</div>
-				</div>
-				<div class="cred-num">
-					<div class="cred-num-val">0</div>
-					<div class="cred-num-label">dados armazenados nos servidores</div>
 				</div>
 			</div>
 		</div>
@@ -634,5 +590,60 @@
 
 	<!-- SCRIPTS -->
 	<script src="{% static 'anonymizer/js/home.js' %}"></script>
+
+	<script>
+		(function () {
+			const overlay   = document.getElementById('loader-overlay');
+			const bar       = document.getElementById('loader-bar');
+			const title     = document.getElementById('loader-title');
+			const sub       = document.getElementById('loader-sub');
+			const fileElem  = document.getElementById('fileElem');
+			const fileInput = document.getElementById('fileInput');
+			const form      = document.getElementById('uploadForm');
+			const dropArea  = document.getElementById('drop-area');
+
+			const steps = [
+				{ pct: 20, t: 'Lendo arquivo…',              s: 'Carregando imagem selecionada' },
+				{ pct: 45, t: 'Extraindo metadados…',        s: 'Identificando GPS, dispositivo e data' },
+				{ pct: 70, t: 'Reconstruindo pixels…',       s: 'Gerando novo arquivo em RGB puro' },
+				{ pct: 90, t: 'Removendo todos os rastros…', s: 'Apagando EXIF permanentemente' },
+				{ pct: 99, t: 'Finalizando…',                s: 'Quase pronto!' },
+			];
+
+			function showLoader() {
+				overlay.style.display = 'flex';
+				bar.style.width = '0%';
+				let i = 0;
+				function next() {
+					if (i >= steps.length) return;
+					const s = steps[i++];
+					bar.style.width = s.pct + '%';
+					title.textContent = s.t;
+					sub.textContent   = s.s;
+					setTimeout(next, 600 + Math.random() * 400);
+				}
+				setTimeout(next, 200);
+			}
+
+			fileElem.addEventListener('change', function () {
+				if (!this.files.length) return;
+				fileInput.files = this.files;
+				showLoader();
+				form.submit();
+			});
+
+			dropArea.addEventListener('drop', function (e) {
+				e.preventDefault();
+				dropArea.classList.remove('dragover');
+				const files = e.dataTransfer.files;
+				if (!files.length) return;
+				const dt = new DataTransfer();
+				dt.items.add(files[0]);
+				fileInput.files = dt.files;
+				showLoader();
+				form.submit();
+			});
+		})();
+	</script>
 </body>
 </html>

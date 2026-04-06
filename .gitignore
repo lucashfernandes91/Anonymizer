@@ -12,33 +12,6 @@ db.sqlite3
 
 # Virtual environments
 .venv
-
-home copy 2.html
-home copy.html
 .editorconfig
-anonymizer/static/anonymizer/img/og-image_files/saved_resource(5).html
-anonymizer/static/anonymizer/img/og-image_files/analytics.min.js.download
-anonymizer/static/anonymizer/img/og-image_files/c6a992d55-xA3TrB-O.css
-anonymizer/static/anonymizer/img/og-image_files/commons.59560acdd69ed701c941.js.gz
-anonymizer/static/anonymizer/img/og-image_files/f12a4347e1080fb88155.js.download
-anonymizer/static/anonymizer/img/og-image_files/facebook-pixel.dynamic.js.gz
-anonymizer/static/anonymizer/img/og-image_files/fbevents.js.download
-anonymizer/static/anonymizer/img/og-image_files/index-Bu25JXv2.js.download
-anonymizer/static/anonymizer/img/og-image_files/isolated-segment.html
-anonymizer/static/anonymizer/img/og-image_files/lupk8zyo
-anonymizer/static/anonymizer/img/og-image_files/mcp_apps.html
-anonymizer/static/anonymizer/img/og-image_files/mcp_apps(1).html
-anonymizer/static/anonymizer/img/og-image_files/mcp_apps(2).html
-anonymizer/static/anonymizer/img/og-image_files/preview(23)
-anonymizer/static/anonymizer/img/og-image_files/preview(24)
-anonymizer/static/anonymizer/img/og-image_files/preview(25)
-anonymizer/static/anonymizer/img/og-image_files/preview(26)
-anonymizer/static/anonymizer/img/og-image_files/preview(27)
-anonymizer/static/anonymizer/img/og-image_files/preview(28)
-anonymizer/static/anonymizer/img/og-image_files/preview(34)
-anonymizer/static/anonymizer/img/og-image_files/s.js.download
-anonymizer/static/anonymizer/img/og-image_files/saved_resource.html
-anonymizer/static/anonymizer/img/og-image_files/saved_resource(1).html
-anonymizer/static/anonymizer/img/og-image_files/saved_resource(2).html
-anonymizer/static/anonymizer/img/og-image_files/saved_resource(3).html
-anonymizer/static/anonymizer/img/og-image_files/saved_resource(4).html
+
+prod_config/

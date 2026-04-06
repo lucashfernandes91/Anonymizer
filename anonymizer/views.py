@@ -189,19 +189,19 @@ def home(request):
 			context["erro"] = "Formato não suportado"
 			return render(request, "home.html", context)
 
-		# 🔍 extrai EXIF e GPS ANTES de converter/limpar
+		# extrai EXIF e GPS ANTES de converter/limpar
 		exif_raw, gps_detectado, lat, lon = extrair_gps(img)
 		exif = sanitizar_exif(exif_raw)
 
-		# 📅 formata datas para exibição legível
+		# formata datas para exibição legível
 		for campo in ('DateTimeOriginal', 'DateTimeDigitized', 'DateTime'):
 			if exif.get(campo):
 				exif[campo] = formatar_datetime_exif(exif[campo])
 
-		# 🔐 limpeza total — converte para RGB, descarta todos os metadados
+		# limpeza total — converte para RGB, descarta todos os metadados
 		img = img.convert("RGB")
 		buffer = io.BytesIO()
-		img.save(buffer, format="PNG")
+		img.save(buffer, format="JPEG", quality=85, optimize=True)
 		buffer.seek(0)
 
 		EstatisticaGlobal.incrementar()
