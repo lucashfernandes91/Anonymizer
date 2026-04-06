@@ -7,7 +7,7 @@ wheels/
 *.egg-info
 *migrations/
 staticfiles/
-
+core/settings.py
 db.sqlite3
 
 # Virtual environments

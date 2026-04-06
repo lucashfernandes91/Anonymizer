@@ -10,7 +10,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	}
 
 	// Fecha menu mobile e corrige scroll offset da navbar fixa
-	document.querySelectorAll('#nav-links .nav-link').forEach(link => {
+	document.querySelectorAll('nav a[href^="#"], #nav-links .nav-link').forEach(link => {
 		link.addEventListener('click', (e) => {
 			document.getElementById('nav-links').classList.remove('open');
 
@@ -22,7 +22,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 			e.preventDefault();
 			const navHeight = document.querySelector('nav').offsetHeight;
-			const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 8;
+			const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 16;
 			window.scrollTo({ top, behavior: 'smooth' });
 		});
 	});
