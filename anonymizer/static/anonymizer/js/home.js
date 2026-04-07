@@ -1,16 +1,7 @@
 window.addEventListener('DOMContentLoaded', () => {
 
-	// Scroll para resultado quando existir
-	const resultArea = document.getElementById('result-area');
-	const hasResult = resultArea && resultArea.dataset.hasResult === 'true';
-	if (hasResult) {
-		const navHeight = document.querySelector('nav').offsetHeight;
-		const top = resultArea.getBoundingClientRect().top + window.scrollY - navHeight - 16;
-		window.scrollTo({ top, behavior: 'smooth' });
-	}
-
 	// Fecha menu mobile e corrige scroll offset da navbar fixa
-	document.querySelectorAll('nav a[href^="#"], #nav-links .nav-link').forEach(link => {
+	document.querySelectorAll('nav a[href^="#"]').forEach(link => {
 		link.addEventListener('click', (e) => {
 			document.getElementById('nav-links').classList.remove('open');
 
@@ -22,7 +13,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 			e.preventDefault();
 			const navHeight = document.querySelector('nav').offsetHeight;
-			const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 16;
+			const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 8;
 			window.scrollTo({ top, behavior: 'smooth' });
 		});
 	});
@@ -56,3 +47,23 @@ window.addEventListener('DOMContentLoaded', () => {
 	});
 
 });
+
+// Scroll para resultado APÓS tudo carregar (imagens base64 incluídas)
+window.addEventListener('load', () => {
+	const resultArea = document.getElementById('result-area');
+	const hasResult = resultArea && resultArea.dataset.hasResult === 'true';
+	if (!hasResult) return;
+
+	const navHeight = document.querySelector('nav').offsetHeight;
+	const scrollTarget = document.querySelector('.gps-block') || resultArea;
+	const top = scrollTarget.getBoundingClientRect().top + window.scrollY - navHeight - 16;
+	window.scrollTo({ top, behavior: 'smooth' });
+});
+
+// Back to top
+const backToTop = document.getElementById('back-to-top');
+if (backToTop) {
+	window.addEventListener('scroll', () => {
+		backToTop.classList.toggle('visible', window.scrollY > 300);
+	}, { passive: true });
+}
