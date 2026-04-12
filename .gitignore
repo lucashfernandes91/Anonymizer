@@ -9,10 +9,14 @@ wheels/
 staticfiles/
 core/settings.py
 db.sqlite3
-BKP/
+.claude/
 
 # Virtual environments
 .venv
 .editorconfig
+uv.lock
+pyproject.toml
 
 prod_config/
+settings_prod.py
+api_tester.html

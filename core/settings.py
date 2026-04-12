@@ -25,7 +25,8 @@ INSTALLED_APPS = [
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
 	'core',
-	'anonymizer',
+	'apps.anonymizer',
+	'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -43,7 +44,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
 	{
 		'BACKEND': 'django.template.backends.django.DjangoTemplates',
-		'DIRS': [BASE_DIR / 'anonymizer' / 'templates'],
+		'DIRS': [BASE_DIR / 'apps' / 'anonymizer' / 'templates'],
 		'APP_DIRS': True,
 		'OPTIONS': {
 			'context_processors': [

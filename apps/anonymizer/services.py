@@ -76,10 +76,8 @@ def extrair_exif(img):
 def anonimizar_imagem(image_file):
 	img = Image.open(image_file)
 
-	# extrai metadados antes
 	exif_original, gps_detectado, lat, lon = extrair_exif(img)
 
-	# remove metadados
 	img = img.convert("RGB")
 	pixels = img.load()
 
@@ -112,17 +110,9 @@ def converter_gps(valor):
 
 
 def obter_endereco(lat, lon):
-	"""
-	Retorna dicionário com campos separados:
-	rua, numero, bairro, cidade, estado, pais, cep, display
-	"""
 	try:
 		url = f"https://nominatim.openstreetmap.org/reverse?format=json&lat={lat}&lon={lon}&addressdetails=1"
-
-		headers = {
-			"User-Agent": "anonimizador-app/1.0"
-		}
-
+		headers = {"User-Agent": "anonimizador-app/1.0"}
 		response = requests.get(url, headers=headers, timeout=5)
 
 		if response.status_code == 200:
@@ -130,12 +120,9 @@ def obter_endereco(lat, lon):
 			addr = data.get("address", {})
 
 			rua = (
-				addr.get("road") or
-				addr.get("pedestrian") or
-				addr.get("footway") or
-				addr.get("street") or
-				addr.get("path") or
-				""
+				addr.get("road") or addr.get("pedestrian") or
+				addr.get("footway") or addr.get("street") or
+				addr.get("path") or ""
 			)
 
 			numero  = addr.get("house_number", "s/n")
@@ -148,23 +135,14 @@ def obter_endereco(lat, lon):
 			partes = []
 			if rua:
 				partes.append(f"{rua}, {numero}" if numero != "s/n" else rua)
-			if bairro:
-				partes.append(bairro)
-			if cidade:
-				partes.append(cidade)
-			if estado:
-				partes.append(estado)
-			if pais:
-				partes.append(pais)
+			if bairro: partes.append(bairro)
+			if cidade: partes.append(cidade)
+			if estado: partes.append(estado)
+			if pais:   partes.append(pais)
 
 			return {
-				"rua":     rua,
-				"numero":  numero,
-				"bairro":  bairro,
-				"cidade":  cidade,
-				"estado":  estado,
-				"pais":    pais,
-				"cep":     cep,
+				"rua": rua, "numero": numero, "bairro": bairro,
+				"cidade": cidade, "estado": estado, "pais": pais, "cep": cep,
 				"display": " — ".join(partes) if partes else data.get("display_name", ""),
 			}
 
@@ -176,11 +154,9 @@ def obter_endereco(lat, lon):
 
 def parse_gps_info(gps_info):
 	gps_parsed = {}
-
 	for key in gps_info:
 		nome = ExifTags.GPSTAGS.get(key, key)
 		gps_parsed[nome] = gps_info[key]
-
 	return gps_parsed
 
 
@@ -189,31 +165,21 @@ def extrair_classificar_metadados(image_file):
 	img = Image.open(image_file)
 
 	exif_data = img._getexif()
-
 	if not exif_data:
 		return []
 
 	metadados = []
-
 	for tag_id, valor in exif_data.items():
 		tag = ExifTags.TAGS.get(tag_id, tag_id)
-
-		# tratar GPS
 		if tag == "GPSInfo":
 			valor = parse_gps_info(valor)
-
 		nivel, prioridade = CRITICIDADE.get(tag, ("BAIXO", 999))
-
 		metadados.append({
-			"tag": tag,
-			"valor": str(valor),
-			"criticidade": nivel,
-			"prioridade": prioridade
+			"tag": tag, "valor": str(valor),
+			"criticidade": nivel, "prioridade": prioridade
 		})
 
-	# ordenação por criticidade
 	metadados.sort(key=lambda x: x["prioridade"])
-
 	return metadados
 
 
@@ -227,8 +193,7 @@ def dms_to_decimal(dms, ref):
 		graus    = to_float(dms[0])
 		minutos  = to_float(dms[1])
 		segundos = to_float(dms[2])
-
-		decimal = graus + (minutos / 60.0) + (segundos / 3600.0)
+		decimal  = graus + (minutos / 60.0) + (segundos / 3600.0)
 
 		if ref in ["S", "W"]:
 			decimal = -decimal
