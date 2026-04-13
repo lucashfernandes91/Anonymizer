@@ -1,7 +1,5 @@
 # Anonymizer
 
-![Anonymizer](static/logo.png)
-
 ## 🌟 Sobre o Projeto
 
 O **Anonymizer** é uma ferramenta poderosa que vai além de simplesmente remover metadados de imagens. Ele oferece:
@@ -11,6 +9,8 @@ O **Anonymizer** é uma ferramenta poderosa que vai além de simplesmente remove
 - 🧹 Uma forma de zerar completamente o histórico oculto de um arquivo.
 
 Com o Anonymizer, você pode garantir a privacidade total de suas imagens, eliminando qualquer dado sensível que possa estar embutido nelas.
+
+Acesse em: **https://anonymizer.com.br**
 
 ---
 
@@ -78,11 +78,74 @@ O fluxo é propositalmente simples:
 
 ---
 
+## 🌐 API REST
+
+O Anonymizer disponibiliza uma API REST pública para integração programática — sem autenticação, sem cadastro, gratuita.
+
+**Documentação completa:** https://anonymizer.com.br/api-docs/
+
+### Endpoint
+
+```
+POST https://anonymizer.com.br/api/
+Content-Type: multipart/form-data
+```
+
+**Parâmetro:** `image` — arquivo JPG, PNG ou WEBP (máx 10MB)
+
+**Resposta:** arquivo JPEG anonimizado diretamente no corpo da resposta.
+
+### 📋 Headers de resposta
+
+| Header | Descrição |
+|---|---|
+| `X-Campos-Removidos` | Total de campos EXIF removidos |
+| `X-Tem-GPS` | `true` se havia GPS na imagem original |
+| `X-Lat` / `X-Lon` | Coordenadas extraídas |
+| `X-Dispositivo` | Fabricante e modelo do dispositivo |
+| `X-Data-Foto` | Data e hora em que a foto foi tirada |
+
+### 💻 Exemplo cURL
+
+```bash
+curl -X POST https://anonymizer.com.br/api/ \
+  -F "image=@foto.jpg" \
+  --output foto_anonimizada.jpg \
+  -D headers.txt
+```
+
+### 🐍 Exemplo Python
+
+```python
+import requests
+
+with open("foto.jpg", "rb") as f:
+    response = requests.post(
+        "https://anonymizer.com.br/api/",
+        files={"image": f}
+    )
+
+if response.status_code == 200:
+    with open("foto_anonimizada.jpg", "wb") as out:
+        out.write(response.content)
+    print("GPS removido:", response.headers.get("X-Tem-GPS"))
+    print("Campos removidos:", response.headers.get("X-Campos-Removidos"))
+```
+
+### ⚠️ Erros
+
+| Código | Descrição |
+|---|---|
+| `400` | Imagem inválida, formato não suportado ou arquivo muito grande |
+| `429` | Muitas requisições. Aguarde e tente novamente |
+
+---
+
 ## 🚀 Como Usar
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/anonymizer.git
+   git clone https://github.com/lucashfernandes91/anonymizer.git
    ```
 
 2. Acesse o diretório do projeto:
@@ -126,11 +189,11 @@ O fluxo é propositalmente simples:
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Python**
-- **Django**
-- **HTML5**
-- **CSS3**
-- **JavaScript**
+- **Python / Django**
+- **Pillow** — reconstrução RGB pixel a pixel
+- **Django REST Framework** — API REST
+- **Nominatim / OpenStreetMap** — reverse geocoding
+- **HTML5, CSS3, JavaScript** puro — sem frameworks frontend
 
 ---
 
@@ -138,29 +201,33 @@ O fluxo é propositalmente simples:
 
 ```
 .
-├── anonymizer/
-│   ├── __init__.py
-│   ├── admin.py
-│   ├── apps.py
-│   ├── models.py
-│   ├── services.py
-│   ├── tests.py
-│   ├── urls.py
-│   ├── views.py
-│   └── static/
-│   │    └── anonymizer/
-│   │       └── css/
-│   │           └── home.css
-│   │       └── js/
-│   │           └── home.js
-│   │       └── img/
-│   │           └── og-image.png
-│   └── templates/
-│       └── 429.html
-│       └── home.html
-│       └── llms.txt
-│       └── robots.txt
-│       └── sitemap.xml
+├── apps/
+│   └── anonymizer/
+│       ├── __init__.py
+│       ├── admin.py
+│       ├── apps.py
+│       ├── models.py
+│       ├── services.py
+│       ├── tests.py
+│       ├── urls.py
+│       ├── views.py
+│       ├── migrations/
+│       └── static/
+│       │    └── anonymizer/
+│       │       └── css/
+│       │           └── home.css
+│       │       └── js/
+│       │           └── home.js
+│       │       └── img/
+│       │           └── favicon.svg
+│       │           └── og-image.png
+│       └── templates/
+│           └── 429.html
+│           └── api.html
+│           └── home.html
+│           └── llms.txt
+│           └── robots.txt
+│           └── sitemap.xml
 ├── core/
 │   ├── __init__.py
 │   ├── asgi.py

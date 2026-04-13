@@ -28,6 +28,34 @@ class EstatisticaGlobal(models.Model):
 		return obj.imagens_processadas
 
 
+class ImagemProcessada(models.Model):
+	"""
+	Registra cada imagem processada vinculada à sessão do usuário.
+	"""
+	acesso = models.ForeignKey(
+		'AcessoUnico',
+		on_delete=models.CASCADE,
+		related_name='imagens',
+	)
+	nome_original = models.CharField(max_length=255, blank=True)
+	tamanho_bytes = models.PositiveIntegerField(default=0)
+	tinha_gps = models.BooleanField(default=False)
+	lat = models.FloatField(null=True, blank=True)
+	lon = models.FloatField(null=True, blank=True)
+	dispositivo = models.CharField(max_length=255, blank=True)
+	data_foto = models.CharField(max_length=100, blank=True)
+	campos_removidos = models.PositiveIntegerField(default=0)
+	processada_em = models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		verbose_name = "Imagem Processada"
+		verbose_name_plural = "Imagens Processadas"
+		ordering = ['-processada_em']
+
+	def __str__(self):
+		return f"{self.nome_original} — {self.processada_em.strftime('%d/%m/%Y %H:%M')}"
+
+
 class AcessoUnico(models.Model):
 	"""
 	Registra acessos únicos por session_key.

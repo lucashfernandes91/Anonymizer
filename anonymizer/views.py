@@ -8,7 +8,9 @@ from django.core.cache import cache
 from PIL import Image, UnidentifiedImageError, ExifTags
 
 from .services import obter_endereco, extrair_classificar_metadados
-from .models import EstatisticaGlobal, AcessoUnico
+from .models import EstatisticaGlobal, AcessoUnico, ImagemProcessada
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 
 MAX_SIZE = 10 * 1024 * 1024  # 10MB
@@ -47,12 +49,29 @@ def registrar_acesso(request):
 	if not request.session.session_key:
 		request.session.create()
 	session_key = request.session.session_key
-	AcessoUnico.objects.get_or_create(
+	acesso, _ = AcessoUnico.objects.get_or_create(
 		session_key=session_key,
 		defaults={
 			'ip': _get_ip(request),
 			'user_agent': request.META.get('HTTP_USER_AGENT', '')[:500],
 		}
+	)
+	return acesso
+
+
+def registrar_imagem(acesso, image_file, result):
+	"""Salva o registro do upload vinculado à sessão."""
+	dispositivo = (result['exif'].get('Make', '') + ' ' + result['exif'].get('Model', '')).strip()
+	ImagemProcessada.objects.create(
+		acesso=acesso,
+		nome_original=image_file.name or '',
+		tamanho_bytes=image_file.size,
+		tinha_gps=result['gps_detectado'],
+		lat=result['lat'],
+		lon=result['lon'],
+		dispositivo=dispositivo,
+		data_foto=result['exif'].get('DateTimeOriginal') or '',
+		campos_removidos=len(result['metadados']),
 	)
 
 
@@ -147,8 +166,61 @@ def _dms_to_decimal(dms, ref):
 		return None
 
 
+def _processar_imagem(image_file):
+	"""Lógica central de anonimização — reutilizada pela view web e pela API."""
+	image_file.seek(0)
+	img = Image.open(image_file)
+
+	if img.width * img.height > 20_000_000:
+		return None, 'Imagem muito grande'
+
+	if img.format not in ["JPG", "JPEG", "PNG", "WEBP"]:
+		return None, 'Formato não suportado. Use JPG,JPEG, PNG ou WEBP'
+
+	exif_raw, gps_detectado, lat, lon = extrair_gps(img)
+	exif = sanitizar_exif(exif_raw)
+
+	for campo in ('DateTimeOriginal', 'DateTimeDigitized', 'DateTime'):
+		if exif.get(campo):
+			exif[campo] = formatar_datetime_exif(exif[campo])
+
+	img = img.convert("RGB")
+	buffer = io.BytesIO()
+	img.save(buffer, format="JPEG", quality=85, optimize=True)
+	buffer.seek(0)
+
+	EstatisticaGlobal.incrementar()
+
+	image_file.seek(0)
+	metadados = extrair_classificar_metadados(image_file)
+
+	lat = float(lat) if lat is not None else None
+	lon = float(lon) if lon is not None else None
+
+	endereco = None
+	if lat is not None and lon is not None:
+		endereco = obter_endereco(lat, lon)
+		if isinstance(endereco, str):
+			endereco = {"display": endereco}
+
+	return {
+		'img': img,
+		'buffer': buffer,
+		'exif': exif,
+		'gps_detectado': gps_detectado,
+		'lat': lat,
+		'lon': lon,
+		'endereco': endereco,
+		'metadados': metadados,
+	}, None
+
+
+def api_docs(request):
+	return render(request, 'api.html')
+
+
 def home(request):
-	registrar_acesso(request)
+	acesso = registrar_acesso(request)
 
 	context = {
 		'total_imagens': EstatisticaGlobal.total(),
@@ -237,3 +309,50 @@ def home(request):
 		}
 
 	return render(request, "home.html", context)
+
+
+@api_view(['POST'])
+def anonymize_api(request):
+	if rate_limit(request):
+		return Response({'error': 'Muitas requisições. Tente novamente em breve.'}, status=429)
+
+	image_file = request.FILES.get('image')
+	if not image_file:
+		return Response({'error': 'Nenhuma imagem enviada'}, status=400)
+
+	if image_file.size > MAX_SIZE:
+		return Response({'error': 'Arquivo muito grande (máx 10MB)'}, status=400)
+
+	try:
+		img = Image.open(image_file)
+		img.verify()
+	except UnidentifiedImageError:
+		return Response({'error': 'Arquivo inválido (não é imagem)'}, status=400)
+
+	image_file.seek(0)
+	result, erro = _processar_imagem(image_file)
+	if erro:
+		return Response({'error': erro}, status=400)
+
+	acesso_api, _ = AcessoUnico.objects.get_or_create(
+		session_key=f"api:{_get_ip(request)}",
+		defaults={
+			'ip': _get_ip(request),
+			'user_agent': request.META.get('HTTP_USER_AGENT', '')[:500],
+		}
+	)
+	registrar_imagem(acesso_api, image_file, result)
+
+	nome_original = image_file.name or 'imagem'
+	nome_base = nome_original.rsplit('.', 1)[0]
+	nome_saida = f"{nome_base}_anonimizado.jpg"
+
+	response = HttpResponse(result['buffer'].getvalue(), content_type='image/jpeg')
+	response['Content-Disposition'] = f'attachment; filename="{nome_saida}"'
+	response['X-Campos-Removidos'] = str(len(result['metadados']))
+	response['X-Tem-GPS'] = str(result['gps_detectado']).lower()
+	response['X-Lat'] = str(result['lat']) if result['lat'] is not None else ''
+	response['X-Lon'] = str(result['lon']) if result['lon'] is not None else ''
+	response['X-Dispositivo'] = (result['exif'].get('Make', '') + ' ' + result['exif'].get('Model', '')).strip()
+	response['X-Data-Foto'] = result['exif'].get('DateTimeOriginal') or ''
+	return response

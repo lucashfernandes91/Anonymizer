@@ -60,12 +60,14 @@
 	}
 	</script>
 
+	{% load static %}
+	<link rel="icon" type="image/svg+xml" href="{% static 'anonymizer/img/favicon.svg' %}">
+	<link rel="apple-touch-icon" href="{% static 'anonymizer/img/favicon.svg' %}">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Manrope:wght@400;500&display=swap">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Manrope:wght@400;500&display=swap" media="print" onload="this.media='all'">
 	<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Manrope:wght@400;500&display=swap"></noscript>
-	{% load static %}
 	<link rel="stylesheet" href="{% static 'anonymizer/css/home.css' %}">
 </head>
 	<body>
@@ -83,10 +85,10 @@
 				<a href="#como"       class="nav-link">Como funciona</a>
 				<a href="#tecnologia" class="nav-link">Tecnologia</a>
 				<a href="#beneficios" class="nav-link">Benefícios</a>
+				<a href="/api-docs/"  class="nav-link nav-link-mobile" style="color:var(--blue-bright)">Documentação API</a>
 			</div>
 			<div class="nav-right">
 				<button class="nav-mobile-toggle" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
-				<a href="#upload" class="nav-cta">Limpar imagem →</a>
 			</div>
 		</nav>
 
@@ -312,41 +314,12 @@
 				{% else %}
 				<!-- Bloco sem GPS -->
 				<div class="gps-block">
-					<div class="gps-header gps-header-safe">
+					<div class="gps-header gps-header-safe" style="border-radius: 16px;">
 						<div class="gps-header-icon">🛡️</div>
 						<div>
 							<div class="gps-header-title gps-header-title-safe">Sem dados de localização — sua privacidade está protegida</div>
 							<div class="gps-header-sub">Nenhuma coordenada GPS foi encontrada nos metadados desta imagem.</div>
 						</div>
-					</div>
-					<div class="gps-footer">
-						{% if exif.Make or exif.Model %}
-						<div class="gps-info-row">
-							<span class="gps-icon">📱</span>
-							<div>
-								<div class="gps-info-label">Dispositivo identificado</div>
-								<div class="gps-info-value">{{ exif.Make }} {{ exif.Model }}</div>
-							</div>
-						</div>
-						{% endif %}
-						{% if exif.DateTimeOriginal %}
-						<div class="gps-info-row">
-							<span class="gps-icon">🕒</span>
-							<div>
-								<div class="gps-info-label">Foto tirada em</div>
-								<div class="gps-info-value">{{ exif.DateTimeOriginal }}</div>
-							</div>
-						</div>
-						{% endif %}
-						{% if metadados %}
-						<div class="gps-info-row">
-							<span class="gps-icon">🧹</span>
-							<div>
-								<div class="gps-info-label">Informações ocultas removidas</div>
-								<div class="gps-info-value"><span class="gps-count">{{ metadados|length }}</span> campos apagados permanentemente</div>
-							</div>
-						</div>
-						{% endif %}
 					</div>
 				</div>
 				{% endif %}
@@ -375,7 +348,14 @@
 						<h3>🧹 Metadados removidos — Análise de risco</h3>
 						<ul>
 							{% for item in metadados %}
-							<li><b>{{ item.criticidade }}</b> → {{ item.tag }}: {{ item.valor|truncatechars:300 }}</li>
+							<li>
+							{% if item.criticidade == 'CRITICO' or item.criticidade == 'CRÍTICO' %}<b class="meta-critico">{{ item.criticidade }}</b>
+							{% elif item.criticidade == 'ALTO' %}<b class="meta-alto">{{ item.criticidade }}</b>
+							{% elif item.criticidade == 'MEDIO' or item.criticidade == 'MÉDIO' %}<b class="meta-medio">{{ item.criticidade }}</b>
+							{% else %}<b class="meta-baixo">{{ item.criticidade }}</b>
+							{% endif %}
+							→ {{ item.tag }}: {{ item.valor|truncatechars:300 }}
+							</li>
 							{% endfor %}
 						</ul>
 					{% else %}

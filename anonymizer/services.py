@@ -7,22 +7,22 @@ import requests
 
 # Ordenado por criticidade
 CRITICIDADE = {
-	"GPSInfo": ("CRITICO", 1),
-	"DateTimeOriginal": ("CRITICO", 2),
-	"DateTimeDigitized": ("CRITICO", 2),
-	"DateTime": ("CRITICO", 2),
-	"Make": ("CRITICO", 3),
-	"Model": ("CRITICO", 3),
-	"BodySerialNumber": ("CRITICO", 3),
+	"GPSInfo": ("CRÍTICO", 1),
+	"DateTimeOriginal": ("CRÍTICO", 2),
+	"DateTimeDigitized": ("CRÍTICO", 2),
+	"DateTime": ("CRÍTICO", 2),
+	"Make": ("CRÍTICO", 3),
+	"Model": ("CRÍTICO", 3),
+	"BodySerialNumber": ("CRÍTICO", 3),
 
 	"Software": ("ALTO", 4),
 	"Artist": ("ALTO", 4),
 	"Copyright": ("ALTO", 4),
 
-	"ExposureTime": ("MEDIO", 5),
-	"FNumber": ("MEDIO", 5),
-	"ISOSpeedRatings": ("MEDIO", 5),
-	"FocalLength": ("MEDIO", 5),
+	"ExposureTime": ("MÉDIO", 5),
+	"FNumber": ("MÉDIO", 5),
+	"ISOSpeedRatings": ("MÉDIO", 5),
+	"FocalLength": ("MÉDIO", 5),
 
 	"ImageWidth": ("BAIXO", 6),
 	"ImageLength": ("BAIXO", 6),

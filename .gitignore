@@ -14,5 +14,6 @@ BKP/
 # Virtual environments
 .venv
 .editorconfig
+.claude
 
 prod_config/

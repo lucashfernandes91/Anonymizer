@@ -68,7 +68,9 @@ body::before {
 nav {
 	position: fixed; top: 0; left: 0; right: 0;
 	z-index: 100;
-	display: flex; align-items: center; justify-content: space-between;
+	display: grid;
+	grid-template-columns: 1fr auto 1fr;
+	align-items: center;
 	padding: 16px 48px;
 	background: rgba(10,14,26,0.75);
 	backdrop-filter: blur(20px);
@@ -154,7 +156,7 @@ nav {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	padding: 80px 24px 48px;
+	padding: 120px 24px 48px;
 	text-align: center;
 }
 
@@ -617,8 +619,14 @@ footer {
 }
 .meta-table h3 {
 	font-family: 'Plus Jakarta Sans', sans-serif;
-	font-size: 0.95rem; font-weight: 700; margin-bottom: 10px;
+	font-size: 1.05rem; font-weight: 800; margin-bottom: 10px;
+	color: var(--red);
+	letter-spacing: -0.01em;
 }
+.meta-critico { color: var(--red); font-weight: 700; }
+.meta-alto { color: #f97316; font-weight: 700; }
+.meta-medio { color: #f97316; font-weight: 700; }
+.meta-baixo { color: #fbbf24; font-weight: 700; }
 .meta-table ul { list-style: none; }
 .meta-table li {
 	padding: 4px 0;
@@ -630,7 +638,7 @@ footer {
 	line-height: 1.4;
 }
 .meta-table li:last-child { border-bottom: none; }
-.meta-table li b { color: var(--text); margin-right: 6px; }
+.meta-table li b { margin-right: 6px; }
 
 /* ─── CHOQUE SECTION ─── */
 .choque-section {
@@ -824,36 +832,80 @@ footer {
 /* ─── RESPONSIVE ─── */
 @media (max-width: 768px) {
 	nav { padding: 14px 16px; position: fixed; top: 0; left: 0; right: 0; z-index: 100; }
-	.problem-grid, .tech-grid, .benefits-grid, .steps,
-	.publico-grid, .cred-grid, .cred-numbers { grid-template-columns: 1fr; }
+
+	/* Hero */
+	.hero { padding: 100px 16px 32px; }
+	h1 { font-size: clamp(1.6rem, 7vw, 2.4rem); }
+	.hero-sub { font-size: 0.95rem; }
+	.drop-area { padding: 24px 16px; }
+	.drop-title { font-size: 1.2rem; }
+
+	/* Sections */
+	section { padding: 32px 16px; }
+	.container { padding: 0; }
+	.section-title { font-size: clamp(1.2rem, 5vw, 1.6rem); }
+
+	/* Choque section */
+	.choque-section { padding: 32px 16px; }
+	.choque-inner { grid-template-columns: 1fr; gap: 24px; }
+	.choque-terminal { margin-top: 0; }
+	.terminal-body { font-size: 0.75rem; padding: 16px; }
+
+	/* Grids — empilhar em coluna única */
+	.problem-grid,
+	.benefits-grid,
+	.publico-grid,
+	.cred-grid,
+	.cred-numbers,
+	.tech-grid,
+	.steps { grid-template-columns: 1fr; gap: 12px; }
+
+	/* Steps sem gap de linha */
 	.steps { gap: 2px; }
-	.problem-visual, .choque-inner { flex-direction: column; }
-	.choque-inner { grid-template-columns: 1fr; }
-	footer { flex-direction: column; gap: 12px; text-align: center; }
-	.trust-item { text-align: center; border-bottom: 1px solid var(--border); }
+
+	/* Trust bar — 3 colunas no mobile */
+	.trust-bar { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+	.trust-item { border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 14px 8px; font-size: 0.7rem; }
 	.trust-item:nth-child(3n) { border-right: none; }
 	.trust-item:nth-last-child(-n+3) { border-bottom: none; }
+	.trust-item strong { font-size: 1rem; }
 
-	/* ─── RESULTADO / GPS MOBILE ─── */
+	/* Problem visual */
+	.problem-visual { flex-direction: column; }
+
+	/* Result area */
 	.result-area-wrap { padding: 24px 16px 48px; }
 	.result-grid { grid-template-columns: 1fr; }
 	.result-header { flex-direction: column; align-items: flex-start; }
-	.result-actions { width: 100%; }
+	.result-actions { width: 100%; flex-direction: column; }
 	.btn-nova, .btn-download-big { width: 100%; justify-content: center; }
 	.result-share { flex-direction: column; }
 	.btn-share { width: 100%; justify-content: center; }
+
+	/* GPS mobile */
 	.gps-block { margin: 0 0 24px; }
-	.gps-row { flex-wrap: wrap; gap: 6px; }
+	.gps-header { padding: 12px 16px; flex-wrap: wrap; }
+	.gps-row { flex-wrap: wrap; gap: 6px; padding: 8px 0; }
 	.gps-maps-btn { width: 100%; justify-content: center; margin-top: 4px; }
 	.gps-value-rua { flex: unset; width: 100%; }
 	.gps-address { padding: 0 16px; }
 	.gps-footer { padding: 12px 16px; }
-	.gps-header { padding: 12px 16px; }
+
+	/* Publico section */
+	.publico-section { padding: 32px 16px; }
+
+	/* Footer */
+	footer { flex-direction: column; gap: 12px; text-align: center; }
+}
+
+.nav-link-mobile { display: flex; }
+@media (max-width: 860px) {
+	.nav-link-mobile { border-top: 1px solid var(--border); margin-top: 4px; padding-top: 12px !important; }
 }
 
 /* ─── NAV RIGHT ─── */
 .nav-right {
-	display: flex; align-items: center; gap: 8px;
+	display: flex; align-items: center; gap: 8px; justify-content: flex-end;
 }
 
 /* ─── GPS BLOCK ─── */
@@ -922,12 +974,15 @@ footer {
 	border-radius: 0 0 16px 16px;
 	padding: 12px 20px;
 }
+.gps-footer-safe {
+	border-color: rgba(34,197,94,0.3);
+}
 .gps-info-row {
 	display: flex; align-items: center; gap: 12px;
 	padding: 5px 0;
 	border-bottom: 1px solid rgba(255,255,255,0.05);
 }
-.gps-info-row-last { border-bottom: none; }
+.gps-info-row:last-child { border-bottom: none; }
 .gps-icon { font-size: 1.2rem; }
 .gps-info-label {
 	font-size: 0.75rem; color: var(--muted);

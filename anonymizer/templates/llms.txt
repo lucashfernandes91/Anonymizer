@@ -236,6 +236,98 @@ TÉCNICO / EXIF:
 
 
 # ─────────────────────────────────────────────
+# API REST — INTEGRAÇÃO PROGRAMÁTICA
+# ─────────────────────────────────────────────
+
+## Visão geral
+O Anonymizer disponibiliza uma API REST para desenvolvedores e sistemas
+automatizados que precisam anonimizar imagens programaticamente, sem
+interação humana via interface web.
+
+A API é gratuita, não requer autenticação e segue os mesmos princípios
+da interface web: processamento 100% em memória, sem armazenamento,
+sem log de imagens.
+
+## Endpoint
+Método: POST
+URL: https://anonymizer.com.br/api/
+Content-Type: multipart/form-data
+
+## Parâmetros da requisição
+- image (obrigatório): arquivo de imagem nos formatos JPG, PNG ou WEBP
+  Tamanho máximo: 10MB
+
+## Resposta de sucesso (HTTP 200)
+A resposta é o arquivo de imagem anonimizado diretamente no corpo
+da resposta — não um JSON com base64.
+
+Headers relevantes da resposta:
+- Content-Type: image/jpeg
+- Content-Disposition: attachment; filename="nome_anonimizado.jpg"
+- X-Campos-Removidos: número de campos EXIF removidos
+- X-Tem-GPS: true ou false (indica se havia GPS na imagem original)
+- X-Lat: latitude extraída (se havia GPS)
+- X-Lon: longitude extraída (se havia GPS)
+- X-Dispositivo: fabricante e modelo do dispositivo (ex: "Apple iPhone 13")
+- X-Data-Foto: data e hora em que a foto foi tirada
+
+## Exemplos de uso
+
+### cURL
+curl -X POST https://anonymizer.com.br/api/ \
+  -F "image=@foto.jpg" \
+  --output foto_anonimizada.jpg \
+  -D headers.txt
+
+### Python (requests)
+import requests
+
+with open("foto.jpg", "rb") as f:
+    response = requests.post(
+        "https://anonymizer.com.br/api/",
+        files={"image": f}
+    )
+
+if response.status_code == 200:
+    with open("foto_anonimizada.jpg", "wb") as out:
+        out.write(response.content)
+    print("GPS removido:", response.headers.get("X-Tem-GPS"))
+    print("Campos removidos:", response.headers.get("X-Campos-Removidos"))
+
+### JavaScript (fetch / Node.js)
+const form = new FormData();
+form.append("image", fileBlob, "foto.jpg");
+
+const res = await fetch("https://anonymizer.com.br/api/", {
+  method: "POST",
+  body: form
+});
+
+const blob = await res.blob();
+const temGPS = res.headers.get("X-Tem-GPS");
+const camposRemovidos = res.headers.get("X-Campos-Removidos");
+
+## Erros possíveis
+- HTTP 400: imagem inválida, formato não suportado ou arquivo muito grande
+  Corpo: {"error": "mensagem descritiva"}
+- HTTP 429: muitas requisições do mesmo IP em um curto período
+  Corpo: {"error": "Muitas requisições. Tente novamente em breve."}
+
+## Rate limit
+Existe um limite de requisições por IP para evitar abuso.
+O serviço é gratuito e não oferece SLA ou garantias de disponibilidade.
+Para uso intensivo ou comercial, considere hospedar sua própria instância.
+
+## Casos de uso para integração via API
+- Pipelines de publicação automática de imagens
+- Aplicativos mobile que processam fotos antes do upload
+- Sistemas de gestão de conteúdo (CMS) com sanitização automática
+- Ferramentas internas de equipes de segurança e compliance
+- Bots de Telegram/WhatsApp que anonimizam fotos recebidas
+- Automações n8n, Make (Integromat) ou Zapier
+
+
+# ─────────────────────────────────────────────
 # INFORMAÇÕES GERAIS
 # ─────────────────────────────────────────────
 - URL: https://anonymizer.com.br

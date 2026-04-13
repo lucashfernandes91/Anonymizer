@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Anonymizer API — Integração programática para remover metadados</title>
+	<meta name="description" content="API REST gratuita para remover metadados EXIF e GPS de imagens programaticamente. Sem autenticação, sem cadastro. Integre em qualquer sistema.">
+	<meta name="robots" content="index, follow">
+	<link rel="canonical" href="https://anonymizer.com.br/api-docs/">
+	{% load static %}
+	<link rel="icon" type="image/svg+xml" href="{% static 'anonymizer/img/favicon.svg' %}">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Manrope:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+	<link rel="stylesheet" href="{% static 'anonymizer/css/home.css' %}">
+	<style>
+		.api-hero{padding:120px 24px 60px;text-align:center;position:relative;z-index:1}
+		.api-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(59,111,245,0.1);border:1px solid rgba(59,111,245,0.25);padding:6px 16px;border-radius:100px;font-size:0.8rem;font-weight:600;color:var(--blue-bright);margin-bottom:20px;letter-spacing:0.06em;text-transform:uppercase}
+		.api-endpoint-badge{display:inline-flex;align-items:center;gap:10px;background:rgba(15,22,40,0.8);border:1px solid var(--border);padding:12px 24px;border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:0.95rem;margin-top:28px}
+		.method-tag{background:var(--blue);color:#fff;padding:3px 10px;border-radius:6px;font-size:0.8rem;font-weight:700;letter-spacing:0.04em}
+		.api-content{max-width:900px;margin:0 auto;padding:0 24px 80px;position:relative;z-index:1}
+		.api-section{margin-bottom:48px}
+		.api-section-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:16px;letter-spacing:-0.02em;display:flex;align-items:center;gap:10px}
+		.api-section-title span{color:var(--blue-bright)}
+		.code-block{background:#060b14;border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:12px}
+		.code-header{background:#0d1420;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+		.code-lang{font-size:0.75rem;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:0.06em;text-transform:uppercase}
+		.code-copy{background:rgba(59,111,245,0.15);border:1px solid rgba(59,111,245,0.3);color:var(--blue-bright);padding:4px 12px;border-radius:6px;font-size:0.75rem;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Manrope',sans-serif}
+		.code-copy:hover{background:rgba(59,111,245,0.3)}
+		.code-body{padding:20px 24px;font-family:'JetBrains Mono',monospace;font-size:0.82rem;line-height:1.9;overflow-x:auto}
+		.cg{color:#4ade80}.cy{color:#fbbf24}.cb{color:#60a5fa}.cr{color:#f87171}.cm{color:#64748b}.cw{color:#e2e8f0}.cp{color:#c084fc}
+		.headers-table{width:100%;border-collapse:collapse;margin-top:12px}
+		.headers-table th{text-align:left;font-size:0.75rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);padding:8px 12px;border-bottom:1px solid var(--border)}
+		.headers-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.85rem;vertical-align:top}
+		.headers-table tr:last-child td{border-bottom:none}
+		.h-name{font-family:'JetBrains Mono',monospace;color:var(--blue-bright);font-size:0.8rem}
+		.h-type{color:var(--muted);font-size:0.78rem}
+		.h-desc{color:#a8b8d0}
+		.error-card{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:12px;padding:14px 18px;margin-top:8px;display:flex;gap:14px;align-items:flex-start}
+		.error-code{font-family:'JetBrains Mono',monospace;font-size:0.9rem;font-weight:700;color:var(--red);white-space:nowrap}
+		.error-desc{font-size:0.875rem;color:#a8b8d0;line-height:1.6}
+		.tab-bar{display:flex;gap:4px;margin-bottom:-1px}
+		.tab-btn{background:none;border:1px solid transparent;border-bottom:none;padding:8px 18px;border-radius:8px 8px 0 0;font-size:0.82rem;font-weight:600;cursor:pointer;color:var(--muted);transition:all 0.2s;font-family:'Manrope',sans-serif}
+		.tab-btn.active{background:#060b14;border-color:var(--border);color:var(--text)}
+		.tab-content{display:none}
+		.tab-content.active{display:block}
+		.use-cases-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
+		.use-case{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px}
+		.use-case-icon{font-size:1.4rem;margin-bottom:8px;display:block}
+		.use-case h4{font-family:'Plus Jakarta Sans',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:4px}
+		.use-case p{font-size:0.82rem;color:#a8b8d0;line-height:1.6}
+		.ic{font-family:monospace;background:rgba(255,255,255,0.06);padding:2px 8px;border-radius:4px;font-size:0.85rem}
+		.nav-link{font-size:0.925rem;font-weight:600;letter-spacing:-0.01em}
+		@media(max-width:768px){
+			.api-hero{padding:100px 16px 40px}
+			.api-hero h1{font-size:clamp(1.8rem,7vw,2.4rem);text-align:center}
+			.api-hero .hero-sub{text-align:center}
+			.api-endpoint-badge{font-size:0.78rem;padding:10px 14px;flex-wrap:wrap;justify-content:center;gap:8px}
+			.api-content{padding:0 16px 60px}
+			.use-cases-grid{grid-template-columns:1fr}
+			.code-body{font-size:0.72rem;padding:14px}
+			.tab-btn{padding:6px 12px;font-size:0.78rem}
+			.headers-table th,.headers-table td{padding:8px 8px;font-size:0.78rem}
+		}
+	</style>
+</head>
+<body>
+	<div class="orb orb-1"></div>
+	<div class="orb orb-2"></div>
+
+	<nav>
+		<a href="https://anonymizer.com.br/" class="logo">Anony<span>mizer</span></a>
+		<div class="nav-links" id="nav-links">
+			<a href="https://anonymizer.com.br/" class="nav-link">Interface web</a>
+			<a href="#endpoint" class="nav-link">Endpoint</a>
+			<a href="#exemplos" class="nav-link">Exemplos</a>
+			<a href="#headers" class="nav-link">Headers</a>
+			<a href="#erros" class="nav-link">Erros</a>
+		</div>
+		<div class="nav-right">
+			<button class="nav-mobile-toggle" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
+			<a href="https://anonymizer.com.br/" class="nav-cta">Usar interface →</a>
+		</div>
+	</nav>
+
+	<div class="api-hero">
+		<div class="api-badge">⚡ API REST pública</div>
+		<h1 style="text-align:center;max-width:700px;margin:0 auto">Integre o <em>Anonymizer</em><br>no seu sistema</h1>
+		<p class="hero-sub" style="margin:20px auto 0;text-align:center">Remova metadados EXIF e GPS de imagens programaticamente. Sem autenticação, sem cadastro, sem limite declarado. Gratuito.</p>
+		<div style="display:flex;justify-content:center;margin-top:28px">
+			<div class="api-endpoint-badge">
+				<span class="method-tag">POST</span>
+				<span>https://anonymizer.com.br/api/</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="api-content">
+
+		<div class="api-section" id="endpoint">
+			<div class="api-section-title">📡 <span>Como funciona</span></div>
+			<p class="tech-p">Envie uma imagem via <span class="ic">multipart/form-data</span> e receba o arquivo JPEG anonimizado diretamente no corpo da resposta — sem JSON, sem base64. Os metadados extraídos chegam nos headers HTTP.</p>
+			<div class="code-block" style="margin-top:20px">
+				<div class="code-header"><span class="code-lang">requisição</span></div>
+				<div class="code-body">
+<span class="cp">POST</span> <span class="cw">https://anonymizer.com.br/api/</span><br>
+<span class="cb">Content-Type</span><span class="cm">:</span> <span class="cy">multipart/form-data</span><br><br>
+<span class="cm"># Campo obrigatório</span><br>
+<span class="cb">image</span><span class="cm">:</span> <span class="cg">&lt;arquivo JPG, PNG ou WEBP — máx 10MB&gt;</span>
+				</div>
+			</div>
+			<div class="code-block" style="margin-top:12px">
+				<div class="code-header"><span class="code-lang">resposta — HTTP 200</span></div>
+				<div class="code-body">
+<span class="cb">Content-Type</span><span class="cm">:</span> <span class="cy">image/jpeg</span><br>
+<span class="cb">Content-Disposition</span><span class="cm">:</span> <span class="cy">attachment; filename="foto_anonimizado.jpg"</span><br>
+<span class="cb">X-Campos-Removidos</span><span class="cm">:</span> <span class="cg">49</span><br>
+<span class="cb">X-Tem-GPS</span><span class="cm">:</span> <span class="cr">true</span><br>
+<span class="cb">X-Lat</span><span class="cm">:</span> <span class="cy">-23.553</span><br>
+<span class="cb">X-Lon</span><span class="cm">:</span> <span class="cy">-46.663</span><br>
+<span class="cb">X-Dispositivo</span><span class="cm">:</span> <span class="cy">Apple iPhone 14 Pro</span><br>
+<span class="cb">X-Data-Foto</span><span class="cm">:</span> <span class="cy">12 de abril de 2026 às 15:44</span><br><br>
+<span class="cm"># Corpo: arquivo JPEG binário pronto para salvar</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="api-section" id="exemplos">
+			<div class="api-section-title">💻 <span>Exemplos de uso</span></div>
+			<div class="tab-bar">
+				<button class="tab-btn active" onclick="showTab('curl',this)">cURL</button>
+				<button class="tab-btn" onclick="showTab('python',this)">Python</button>
+				<button class="tab-btn" onclick="showTab('js',this)">JavaScript</button>
+				<button class="tab-btn" onclick="showTab('php',this)">PHP</button>
+			</div>
+
+			<div id="tab-curl" class="tab-content active">
+				<div class="code-block">
+					<div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode('curl-code',this)">Copiar</button></div>
+					<div class="code-body" id="curl-code"><span class="cm"># Envia a imagem e salva o resultado</span><br>
+<span class="cg">curl</span> <span class="cb">-X POST</span> https://anonymizer.com.br/api/ \<br>
+&nbsp;&nbsp;<span class="cb">-F</span> <span class="cy">"image=@foto.jpg"</span> \<br>
+&nbsp;&nbsp;<span class="cb">--output</span> foto_anonimizada.jpg \<br>
+&nbsp;&nbsp;<span class="cb">-D</span> headers.txt<br><br>
+<span class="cm"># Ver os metadados extraídos</span><br>
+<span class="cg">cat</span> headers.txt</div>
+				</div>
+			</div>
+
+			<div id="tab-python" class="tab-content">
+				<div class="code-block">
+					<div class="code-header"><span class="code-lang">python</span><button class="code-copy" onclick="copyCode('python-code',this)">Copiar</button></div>
+					<div class="code-body" id="python-code"><span class="cp">import</span> <span class="cw">requests</span><br><br>
+<span class="cp">with</span> <span class="cg">open</span>(<span class="cy">"foto.jpg"</span>, <span class="cy">"rb"</span>) <span class="cp">as</span> f:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;response = requests.<span class="cg">post</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cy">"https://anonymizer.com.br/api/"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;files={<span class="cy">"image"</span>: f}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;)<br><br>
+<span class="cp">if</span> response.status_code == <span class="cg">200</span>:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cp">with</span> <span class="cg">open</span>(<span class="cy">"foto_anonimizada.jpg"</span>, <span class="cy">"wb"</span>) <span class="cp">as</span> out:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out.<span class="cg">write</span>(response.content)<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cg">print</span>(<span class="cy">"GPS:"</span>, response.headers.get(<span class="cy">"X-Tem-GPS"</span>))<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cg">print</span>(<span class="cy">"Campos removidos:"</span>, response.headers.get(<span class="cy">"X-Campos-Removidos"</span>))<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cg">print</span>(<span class="cy">"Dispositivo:"</span>, response.headers.get(<span class="cy">"X-Dispositivo"</span>))</div>
+				</div>
+			</div>
+
+			<div id="tab-js" class="tab-content">
+				<div class="code-block">
+					<div class="code-header"><span class="code-lang">javascript</span><button class="code-copy" onclick="copyCode('js-code',this)">Copiar</button></div>
+					<div class="code-body" id="js-code"><span class="cm">// fileInput é um elemento &lt;input type="file"&gt;</span><br>
+<span class="cp">const</span> form = <span class="cp">new</span> <span class="cg">FormData</span>();<br>
+form.<span class="cg">append</span>(<span class="cy">"image"</span>, fileInput.files[<span class="cg">0</span>]);<br><br>
+<span class="cp">const</span> res = <span class="cp">await</span> <span class="cg">fetch</span>(<span class="cy">"https://anonymizer.com.br/api/"</span>, {<br>
+&nbsp;&nbsp;method: <span class="cy">"POST"</span>,<br>
+&nbsp;&nbsp;body: form<br>
+});<br><br>
+<span class="cp">if</span> (res.ok) {<br>
+&nbsp;&nbsp;<span class="cp">const</span> blob = <span class="cp">await</span> res.<span class="cg">blob</span>();<br>
+&nbsp;&nbsp;<span class="cp">const</span> url = URL.<span class="cg">createObjectURL</span>(blob);<br>
+&nbsp;&nbsp;<span class="cp">const</span> a = document.<span class="cg">createElement</span>(<span class="cy">"a"</span>);<br>
+&nbsp;&nbsp;a.href = url;<br>
+&nbsp;&nbsp;a.download = <span class="cy">"foto_anonimizada.jpg"</span>;<br>
+&nbsp;&nbsp;a.<span class="cg">click</span>();<br><br>
+&nbsp;&nbsp;console.<span class="cg">log</span>(<span class="cy">"GPS:"</span>, res.headers.<span class="cg">get</span>(<span class="cy">"X-Tem-GPS"</span>));<br>
+&nbsp;&nbsp;console.<span class="cg">log</span>(<span class="cy">"Campos:"</span>, res.headers.<span class="cg">get</span>(<span class="cy">"X-Campos-Removidos"</span>));<br>
+}</div>
+				</div>
+			</div>
+
+			<div id="tab-php" class="tab-content">
+				<div class="code-block">
+					<div class="code-header"><span class="code-lang">php</span><button class="code-copy" onclick="copyCode('php-code',this)">Copiar</button></div>
+					<div class="code-body" id="php-code"><span class="cp">&lt;?php</span><br>
+<span class="cb">$ch</span> = curl_init(<span class="cy">'https://anonymizer.com.br/api/'</span>);<br><br>
+curl_setopt_array(<span class="cb">$ch</span>, [<br>
+&nbsp;&nbsp;CURLOPT_POST &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; <span class="cg">true</span>,<br>
+&nbsp;&nbsp;CURLOPT_RETURNTRANSFER =&gt; <span class="cg">true</span>,<br>
+&nbsp;&nbsp;CURLOPT_HEADER &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; <span class="cg">true</span>,<br>
+&nbsp;&nbsp;CURLOPT_POSTFIELDS &nbsp;&nbsp;=&gt; [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cy">'image'</span> =&gt; <span class="cp">new</span> CURLFile(<span class="cy">'foto.jpg'</span>)<br>
+&nbsp;&nbsp;]<br>
+]);<br><br>
+<span class="cb">$response</span> = curl_exec(<span class="cb">$ch</span>);<br>
+<span class="cb">$headerSize</span> = curl_getinfo(<span class="cb">$ch</span>, CURLINFO_HEADER_SIZE);<br>
+<span class="cb">$body</span> = substr(<span class="cb">$response</span>, <span class="cb">$headerSize</span>);<br>
+file_put_contents(<span class="cy">'foto_anonimizada.jpg'</span>, <span class="cb">$body</span>);<br>
+curl_close(<span class="cb">$ch</span>);</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="api-section" id="headers">
+			<div class="api-section-title">📋 <span>Headers de resposta</span></div>
+			<p class="tech-p">Os metadados encontrados na imagem original chegam nos headers HTTP da resposta, separados do arquivo.</p>
+			<div class="code-block" style="background:var(--bg2)">
+				<table class="headers-table">
+					<thead><tr><th>Header</th><th>Tipo</th><th>Descrição</th></tr></thead>
+					<tbody>
+						<tr><td class="h-name">X-Campos-Removidos</td><td class="h-type">integer</td><td class="h-desc">Total de campos EXIF removidos</td></tr>
+						<tr><td class="h-name">X-Tem-GPS</td><td class="h-type">boolean</td><td class="h-desc">true se havia coordenadas GPS na imagem original</td></tr>
+						<tr><td class="h-name">X-Lat</td><td class="h-type">float</td><td class="h-desc">Latitude extraída (vazio se não havia GPS)</td></tr>
+						<tr><td class="h-name">X-Lon</td><td class="h-type">float</td><td class="h-desc">Longitude extraída (vazio se não havia GPS)</td></tr>
+						<tr><td class="h-name">X-Dispositivo</td><td class="h-type">string</td><td class="h-desc">Fabricante e modelo do dispositivo</td></tr>
+						<tr><td class="h-name">X-Data-Foto</td><td class="h-type">string</td><td class="h-desc">Data e hora em que a foto foi tirada</td></tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="api-section" id="erros">
+			<div class="api-section-title">⚠️ <span>Erros possíveis</span></div>
+			<div class="error-card">
+				<span class="error-code">400</span>
+				<div class="error-desc">Imagem inválida, formato não suportado ou arquivo muito grande.</div>
+			</div>
+			<div class="error-card">
+				<span class="error-code">429</span>
+				<div class="error-desc">Muitas requisições do mesmo IP. Aguarde alguns segundos e tente novamente.</div>
+			</div>
+		</div>
+
+		<div class="api-section">
+			<div class="api-section-title">🚀 <span>Casos de uso</span></div>
+			<div class="use-cases-grid">
+				<div class="use-case"><span class="use-case-icon">🤖</span><h4>Automações n8n / Make</h4><p>Processe imagens automaticamente antes de publicar em redes sociais ou marketplaces.</p></div>
+				<div class="use-case"><span class="use-case-icon">📱</span><h4>Apps mobile</h4><p>Anonimize fotos antes do upload sem depender de processamento local no dispositivo.</p></div>
+				<div class="use-case"><span class="use-case-icon">💬</span><h4>Bots Telegram / WhatsApp</h4><p>Receba fotos e retorne a versão anonimizada automaticamente para o usuário.</p></div>
+				<div class="use-case"><span class="use-case-icon">🏢</span><h4>Sistemas corporativos</h4><p>Sanitize imagens automaticamente em CMSs e ferramentas de compliance.</p></div>
+			</div>
+		</div>
+
+		<div style="background:rgba(59,111,245,0.06);border:1px solid rgba(59,111,245,0.2);border-radius:16px;padding:32px;text-align:center;margin-top:48px">
+			<div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:10px;letter-spacing:-0.02em">Prefere a interface visual?</div>
+			<p style="color:#a8b8d0;margin-bottom:24px;font-size:0.95rem">Arraste sua imagem e veja os metadados removidos em tempo real — sem código.</p>
+			<a href="https://anonymizer.com.br/" class="nav-cta" style="padding:12px 32px;font-size:0.95rem;border-radius:10px">Usar interface web →</a>
+		</div>
+
+	</div>
+
+	<footer>
+		<a href="https://anonymizer.com.br/" class="footer-logo">Anony<span>mizer</span></a>
+		<div class="footer-tagline">Privacidade para todos. Grátis.</div>
+		<div class="footer-copy">© 2026 Anonymizer · anonymizer.com.br</div>
+	</footer>
+	<button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Voltar ao topo">&#8679;</button>
+
+	<script>
+		function showTab(name, btn) {
+			document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+			document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+			document.getElementById('tab-' + name).classList.add('active');
+			btn.classList.add('active');
+		}
+		function copyCode(id, btn) {
+			navigator.clipboard.writeText(document.getElementById(id).innerText).then(() => {
+				btn.textContent = 'Copiado!';
+				setTimeout(() => btn.textContent = 'Copiar', 2000);
+			});
+		}
+		window.addEventListener('scroll', () => {
+			document.getElementById('back-to-top').classList.toggle('visible', window.scrollY > 300);
+		}, { passive: true });
+		document.querySelectorAll('nav a[href^="#"]').forEach(link => {
+			link.addEventListener('click', e => {
+				document.getElementById('nav-links').classList.remove('open');
+				const target = document.querySelector(link.getAttribute('href'));
+				if (!target) return;
+				e.preventDefault();
+				window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - document.querySelector('nav').offsetHeight - 16, behavior: 'smooth' });
+			});
+		});
+	</script>
+</body>
+</html>

@@ -7,3 +7,7 @@ Sitemap: https://anonymizer.com.br/sitemap.xml
 
 # Arquivo para agentes de IA
 # https://anonymizer.com.br/llms.txt
+
+# API REST disponível
+# Endpoint: POST https://anonymizer.com.br/api/
+# Documentação: https://anonymizer.com.br/llms.txt
