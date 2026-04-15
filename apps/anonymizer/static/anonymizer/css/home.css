@@ -132,7 +132,7 @@ nav {
 	border-color: var(--blue-bright);
 }
 @media (max-width: 860px) {
-	nav { padding: 14px 16px; flex-wrap: wrap; gap: 8px; position: fixed; top: 0; left: 0; right: 0; z-index: 100; }
+	nav { padding: 14px 16px; flex-wrap: wrap; gap: 8px; position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; grid-template-columns: unset; }
 	.nav-links { display: none; }
 	.nav-cta { display: none; }
 	.nav-mobile-toggle { display: flex; }

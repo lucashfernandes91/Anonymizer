@@ -6,7 +6,6 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.cache import cache
 from PIL import Image, UnidentifiedImageError, ExifTags
-
 from .services import obter_endereco, extrair_classificar_metadados
 from .models import EstatisticaGlobal, AcessoUnico, ImagemProcessada
 from rest_framework.decorators import api_view
@@ -15,7 +14,6 @@ from rest_framework.response import Response
 
 MAX_SIZE = 10 * 1024 * 1024  # 10MB
 
-# proteção contra image bomb (global)
 Image.MAX_IMAGE_PIXELS = 20_000_000
 
 MESES = [
@@ -25,7 +23,6 @@ MESES = [
 
 
 def formatar_datetime_exif(valor):
-	"""Converte '2022:05:02 12:32:28' → '02 de maio de 2022 às 12:32'"""
 	try:
 		dt = datetime.strptime(valor, '%Y:%m:%d %H:%M:%S')
 		return f"{dt.day:02d} de {MESES[dt.month-1]} de {dt.year} às {dt.hour:02d}:{dt.minute:02d}"
@@ -101,7 +98,6 @@ def rate_limit(request, limit=10, window=60):
 
 
 def extrair_gps(img):
-	"""Extrai lat/lon e EXIF da imagem antes de anonimizar."""
 	exif_data = {}
 	gps_detectado = False
 	lat = None
@@ -144,7 +140,6 @@ def extrair_gps(img):
 
 
 def _dms_to_decimal(dms, ref):
-	"""Converte coordenadas DMS para decimal."""
 	try:
 		def to_float(x):
 			if isinstance(x, tuple):
@@ -239,7 +234,7 @@ def home(request):
 			return render(request, "home.html", context)
 
 		if image.size > MAX_SIZE:
-			context["erro"] = "Arquivo muito grande (máx 5MB)"
+			context["erro"] = "Arquivo muito grande (máx 10MB)"
 			return render(request, "home.html", context)
 
 		try:
@@ -249,61 +244,29 @@ def home(request):
 			context["erro"] = "Arquivo inválido (não é imagem)"
 			return render(request, "home.html", context)
 
-		# reabrir após verify() — consome o file pointer
 		image.seek(0)
-		img = Image.open(image)
 
-		if img.width * img.height > 20_000_000:
-			context["erro"] = "Imagem muito grande"
+		result, erro = _processar_imagem(image)
+
+		if erro:
+			context["erro"] = erro
 			return render(request, "home.html", context)
 
-		if img.format not in ["JPEG", "PNG", "WEBP"]:
-			context["erro"] = "Formato não suportado"
-			return render(request, "home.html", context)
-
-		# extrai EXIF e GPS ANTES de converter/limpar
-		exif_raw, gps_detectado, lat, lon = extrair_gps(img)
-		exif = sanitizar_exif(exif_raw)
-
-		# formata datas para exibição legível
-		for campo in ('DateTimeOriginal', 'DateTimeDigitized', 'DateTime'):
-			if exif.get(campo):
-				exif[campo] = formatar_datetime_exif(exif[campo])
-
-		# limpeza total — converte para RGB, descarta todos os metadados
-		img = img.convert("RGB")
-		buffer = io.BytesIO()
-		img.save(buffer, format="JPEG", quality=85, optimize=True)
-		buffer.seek(0)
-
-		EstatisticaGlobal.incrementar()
+		registrar_imagem(acesso, image, result)
 
 		image.seek(0)
 		original_b64 = base64.b64encode(image.read()).decode()
-		anon_b64 = base64.b64encode(buffer.getvalue()).decode()
-
-		image.seek(0)
-		metadados = extrair_classificar_metadados(image)
-
-		# reverse geocoding — só executa se tiver GPS
-		lat = float(lat) if lat is not None else None
-		lon = float(lon) if lon is not None else None
-
-		endereco = None
-		if lat is not None and lon is not None:
-			endereco = obter_endereco(lat, lon)
-			if isinstance(endereco, str):
-				endereco = {"display": endereco}
+		anon_b64 = base64.b64encode(result['buffer'].getvalue()).decode()
 
 		context = {
 			"original": original_b64,
 			"anon": anon_b64,
-			"exif": exif,
-			"gps": gps_detectado,
-			"lat": lat,
-			"lon": lon,
-			"endereco": endereco,
-			"metadados": metadados,
+			"exif": result['exif'],
+			"gps": result['gps_detectado'],
+			"lat": result['lat'],
+			"lon": result['lon'],
+			"endereco": result['endereco'],
+			"metadados": result['metadados'],
 			"total_imagens": EstatisticaGlobal.total(),
 			"total_acessos": AcessoUnico.total(),
 		}

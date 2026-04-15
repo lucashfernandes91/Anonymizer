@@ -13,7 +13,7 @@ SECRET_KEY = 'htG_mcs9kSr2G2JworvvGJCHVS_0fkzvkrshv3ZNCjz6c15bgGqsvMjpwGG55G62yF
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['anonymizer.com.br', 'www.anonymizer.com.br', 'localhost', '127.0.0.1']
 
 
 # Application definition

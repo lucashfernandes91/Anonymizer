@@ -7,7 +7,6 @@ class EstatisticaGlobalAdmin(admin.ModelAdmin):
 	list_display = ['imagens_processadas', 'atualizado_em']
 	readonly_fields = ['imagens_processadas', 'atualizado_em']
 
-	# Impede criação de múltiplos registros
 	def has_add_permission(self, request):
 		return not EstatisticaGlobal.objects.exists()
 
