@@ -17,7 +17,7 @@ class EstatisticaGlobalAdmin(admin.ModelAdmin):
 class ImagemProcessadaInline(admin.TabularInline):
 	model = ImagemProcessada
 	extra = 0
-	readonly_fields = ['nome_original', 'tamanho_bytes', 'tinha_gps', 'lat', 'lon', 'dispositivo', 'data_foto', 'campos_removidos', 'processada_em']
+	readonly_fields = ['nome_original', 'tamanho_bytes', 'tinha_gps', 'lat', 'lon', 'dispositivo', 'data_foto', 'campos_removidos', 'origem', 'processada_em']
 	can_delete = False
 
 	def has_add_permission(self, request, obj=None):
@@ -46,9 +46,9 @@ class AcessoUnicoAdmin(admin.ModelAdmin):
 
 @admin.register(ImagemProcessada)
 class ImagemProcessadaAdmin(admin.ModelAdmin):
-	list_display = ['nome_original', 'acesso', 'tamanho_bytes', 'tinha_gps', 'dispositivo', 'processada_em']
-	readonly_fields = ['acesso', 'nome_original', 'tamanho_bytes', 'tinha_gps', 'lat', 'lon', 'dispositivo', 'data_foto', 'campos_removidos', 'processada_em']
-	list_filter = ['tinha_gps', 'processada_em']
+	list_display = ['nome_original', 'acesso', 'tamanho_bytes', 'tinha_gps', 'dispositivo', 'origem', 'processada_em']
+	readonly_fields = ['acesso', 'nome_original', 'tamanho_bytes', 'tinha_gps', 'lat', 'lon', 'dispositivo', 'data_foto', 'campos_removidos', 'origem', 'processada_em']
+	list_filter = ['tinha_gps', 'origem', 'processada_em']
 	search_fields = ['nome_original', 'dispositivo', 'acesso__session_key']
 	ordering = ['-processada_em']
 

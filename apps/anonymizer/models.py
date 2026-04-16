@@ -32,6 +32,11 @@ class ImagemProcessada(models.Model):
 	"""
 	Registra cada imagem processada vinculada à sessão do usuário.
 	"""
+	ORIGEM_CHOICES = [
+		('web', 'Interface Web'),
+		('api', 'API'),
+	]
+
 	acesso = models.ForeignKey(
 		'AcessoUnico',
 		on_delete=models.CASCADE,
@@ -45,6 +50,7 @@ class ImagemProcessada(models.Model):
 	dispositivo = models.CharField(max_length=255, blank=True)
 	data_foto = models.CharField(max_length=100, blank=True)
 	campos_removidos = models.PositiveIntegerField(default=0)
+	origem = models.CharField(max_length=10, choices=ORIGEM_CHOICES, default='web')
 	processada_em = models.DateTimeField(auto_now_add=True)
 
 	class Meta:

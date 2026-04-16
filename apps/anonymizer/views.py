@@ -56,7 +56,7 @@ def registrar_acesso(request):
 	return acesso
 
 
-def registrar_imagem(acesso, image_file, result):
+def registrar_imagem(acesso, image_file, result, origem='web'):
 	"""Salva o registro do upload vinculado à sessão."""
 	dispositivo = (result['exif'].get('Make', '') + ' ' + result['exif'].get('Model', '')).strip()
 	ImagemProcessada.objects.create(
@@ -69,6 +69,7 @@ def registrar_imagem(acesso, image_file, result):
 		dispositivo=dispositivo,
 		data_foto=result['exif'].get('DateTimeOriginal') or '',
 		campos_removidos=len(result['metadados']),
+		origem=origem,
 	)
 
 
@@ -304,7 +305,7 @@ def anonymize_api(request):
 			'user_agent': request.META.get('HTTP_USER_AGENT', '')[:500],
 		}
 	)
-	registrar_imagem(acesso_api, image_file, result)
+	registrar_imagem(acesso_api, image_file, result, origem='api')
 
 	nome_original = image_file.name or 'imagem'
 	nome_base = nome_original.rsplit('.', 1)[0]
