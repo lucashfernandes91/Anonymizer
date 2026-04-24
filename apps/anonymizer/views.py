@@ -45,6 +45,7 @@ def sanitizar_exif(exif_dict):
 def registrar_acesso(request):
 	if not request.session.session_key:
 		request.session.create()
+		request.session.save()
 	session_key = request.session.session_key
 	acesso, _ = AcessoUnico.objects.get_or_create(
 		session_key=session_key,

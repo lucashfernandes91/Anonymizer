@@ -4,21 +4,29 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<!-- ─── SEO BÁSICO ─── -->
+	<!-- ─── HREFLANG MULTILÍNGUE ─── -->
+	<link rel="alternate" hreflang="pt-BR" href="https://anonymizer.com.br/" />
+	<link rel="alternate" hreflang="en" href="https://anonymizer.com.br/en/" />
+	<link rel="alternate" hreflang="x-default" href="https://anonymizer.com.br/" />
+
+	<!-- ─── SEO PORTUGUÊS (PT-BR) ─── -->
 	<title>Anonymizer — Remova metadados e GPS das suas imagens gratuitamente</title>
-	<meta name="description" content="Remova metadados EXIF, localização GPS, modelo do dispositivo e histórico oculto das suas imagens. Grátis, sem cadastro, processamento instantâneo.">
-	<meta name="keywords" content="remover metadados, remover EXIF, remover GPS foto, anonimizar imagem, privacidade foto, limpar metadados imagem">
+	<meta name="description" content="Remova metadados EXIF, localização GPS, modelo do dispositivo e histórico oculto das suas imagens. Reconstrução pixel a pixel. Grátis, sem cadastro, processamento instantâneo.">
+	<meta name="keywords" content="remover metadados, remover EXIF, remover GPS foto, anonimizar imagem, privacidade foto, limpar metadados imagem, remoção GPS, segurança imagem, LGPD">
 	<meta name="author" content="Anonymizer">
-	<meta name="robots" content="index, follow">
+	<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 	<link rel="canonical" href="https://anonymizer.com.br/">
 
 	<!-- ─── OPEN GRAPH (WhatsApp, Facebook, LinkedIn) ─── -->
 	<meta property="og:type" content="website">
 	<meta property="og:url" content="https://anonymizer.com.br/">
 	<meta property="og:title" content="Anonymizer — Remova metadados e GPS das suas imagens">
-	<meta property="og:description" content="Sua foto pode estar revelando onde você mora. Remova GPS, dispositivo e histórico oculto em segundos. Grátis e sem cadastro.">
+	<meta property="og:description" content="Sua foto pode estar revelando onde você mora. Reconstrução pixel a pixel em RGB puro. Remova GPS, dispositivo e histórico oculto em segundos. Grátis e sem cadastro.">
 	<meta property="og:image" content="https://anonymizer.com.br/static/anonymizer/img/og-image.png">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="630">
 	<meta property="og:locale" content="pt_BR">
+	<meta property="og:locale:alternate" content="en_US">
 	<meta property="og:site_name" content="Anonymizer">
 
 	<!-- ─── TWITTER CARD ─── -->
@@ -26,6 +34,7 @@
 	<meta name="twitter:title" content="Anonymizer — Remova metadados e GPS das suas imagens">
 	<meta name="twitter:description" content="Sua foto pode estar revelando onde você mora. Remova GPS, dispositivo e histórico oculto em segundos.">
 	<meta name="twitter:image" content="https://anonymizer.com.br/static/anonymizer/img/og-image.png">
+	<meta name="twitter:site" content="@anonymizer_app">
 
 	<!-- ─── JSON-LD SCHEMA (para IAs e motores de busca) ─── -->
 	<script type="application/ld+json">
@@ -33,32 +42,60 @@
 		"@context": "https://schema.org",
 		"@type": "WebApplication",
 		"name": "Anonymizer",
+		"alternateName": ["Anonymizer - EXIF Remover", "Anonimizador de Imagens"],
 		"url": "https://anonymizer.com.br",
-		"description": "Ferramenta gratuita para remover metadados EXIF e localização GPS de imagens. Reconstrói a imagem do zero em RGB puro, garantindo anonimização total e irreversível.",
+		"description": "Ferramenta gratuita que reconstrói imagens do zero em RGB puro, removendo 100% dos metadados EXIF, GPS e dados ocultos de forma irreversível e forensicamente indetectável.",
 		"applicationCategory": "UtilitiesApplication",
 		"operatingSystem": "Web",
 		"browserRequirements": "Requires JavaScript",
-		"inLanguage": "pt-BR",
+		"inLanguage": ["pt-BR", "en"],
 		"isAccessibleForFree": true,
 		"offers": {
 			"@type": "Offer",
 			"price": "0",
-			"priceCurrency": "BRL"
+			"priceCurrency": "USD"
 		},
 		"featureList": [
-			"Remoção de GPS e localização",
-			"Remoção de metadados EXIF",
-			"Reconstrução RGB pixel a pixel",
-			"Sem cadastro necessário",
-			"Processamento instantâneo"
+			"Remove GPS coordinates and location data",
+			"Remove EXIF metadata completely",
+			"Pixel-by-pixel RGB reconstruction",
+			"No signup or login required",
+			"Instant processing under 3 seconds",
+			"Free unlimited usage",
+			"REST API for enterprise integration",
+			"Forensically unrecoverable metadata removal"
+		],
+		"hasPart": [
+			{
+				"@type": "WebApplication",
+				"name": "Anonymizer API",
+				"url": "https://anonymizer.com.br/api/",
+				"description": "REST API for automated image anonymization in compliance workflows"
+			}
 		],
 		"publisher": {
 			"@type": "Organization",
 			"name": "Anonymizer",
-			"url": "https://anonymizer.com.br"
+			"url": "https://anonymizer.com.br",
+			"logo": "https://anonymizer.com.br/static/anonymizer/img/logo.svg"
+		},
+		"creator": {
+			"@type": "Person",
+			"name": "L. Henriques Ferreira"
+		},
+		"potentialAction": {
+			"@type": "UploadAction",
+			"target": "https://anonymizer.com.br"
 		}
 	}
 	</script>
+
+	<!-- ─── DUBLIN CORE ─── -->
+	<meta name="DC.Title" content="Anonymizer — Image Privacy & EXIF Removal Tool">
+	<meta name="DC.Description" content="Free web application for complete EXIF metadata and GPS removal from digital images using pixel-by-pixel RGB reconstruction.">
+	<meta name="DC.Creator" content="L. Henriques Ferreira">
+	<meta name="DC.Date" content="2026-04-23">
+	<meta name="DC.Language" content="pt-BR, en">
 
 	{% load static %}
 	<link rel="icon" type="image/svg+xml" href="{% static 'anonymizer/img/favicon.svg' %}">

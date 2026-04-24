@@ -10,6 +10,7 @@ staticfiles/
 core/settings.py
 db.sqlite3
 BKP/
+demo*
 
 # Virtual environments
 .venv
@@ -17,3 +18,4 @@ BKP/
 .claude
 
 prod_config/
+claude_desktop_config.json
