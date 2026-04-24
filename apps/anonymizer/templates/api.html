@@ -6,7 +6,7 @@
 	<title>Anonymizer API — Integração programática para remover metadados</title>
 	<meta name="description" content="API REST gratuita para remover metadados EXIF e GPS de imagens programaticamente. Sem autenticação, sem cadastro. Integre em qualquer sistema.">
 	<meta name="robots" content="index, follow">
-	<link rel="canonical" href="https://anonymizer.com.br/api-docs/">
+	<link rel="canonical" href="http://45gk2shqmq6xspz5356hkz3b64ipue22lk2wsfxm23l73tcq7u3xcmid.onion/api-docs/">
 	{% load static %}
 	<link rel="icon" type="image/svg+xml" href="{% static 'anonymizer/img/favicon.svg' %}">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
@@ -69,9 +69,9 @@
 	<div class="orb orb-2"></div>
 
 	<nav>
-		<a href="https://anonymizer.com.br/" class="logo">Anony<span>mizer</span></a>
+		<a href="http://45gk2shqmq6xspz5356hkz3b64ipue22lk2wsfxm23l73tcq7u3xcmid.onion/" class="logo">Anony<span>mizer</span></a>
 		<div class="nav-links" id="nav-links">
-			<a href="https://anonymizer.com.br/" class="nav-link">Interface web</a>
+			<a href="http://45gk2shqmq6xspz5356hkz3b64ipue22lk2wsfxm23l73tcq7u3xcmid.onion/" class="nav-link">Interface web</a>
 			<a href="#endpoint" class="nav-link">Endpoint</a>
 			<a href="#exemplos" class="nav-link">Exemplos</a>
 			<a href="#headers" class="nav-link">Headers</a>
@@ -79,7 +79,7 @@
 		</div>
 		<div class="nav-right">
 			<button class="nav-mobile-toggle" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
-			<a href="https://anonymizer.com.br/" class="nav-cta">Usar interface →</a>
+			<a href="http://45gk2shqmq6xspz5356hkz3b64ipue22lk2wsfxm23l73tcq7u3xcmid.onion/" class="nav-cta">Usar interface →</a>
 		</div>
 	</nav>
 
@@ -90,7 +90,7 @@
 		<div style="display:flex;justify-content:center;margin-top:28px">
 			<div class="api-endpoint-badge">
 				<span class="method-tag">POST</span>
-				<span>https://anonymizer.com.br/api/</span>
+				<span>http://45gk2shqmq6xspz5356hkz3b64ipue22lk2wsfxm23l73tcq7u3xcmid.onion/api/</span>
 			</div>
 		</div>
 	</div>
@@ -103,7 +103,7 @@
 			<div class="code-block" style="margin-top:20px">
 				<div class="code-header"><span class="code-lang">requisição</span></div>
 				<div class="code-body">
-<span class="cp">POST</span> <span class="cw">https://anonymizer.com.br/api/</span><br>
+<span class="cp">POST</span> <span class="cw">http://45gk2shqmq6xspz5356hkz3b64ipue22lk2wsfxm23l73tcq7u3xcmid.onion/api/</span><br>
 <span class="cb">Content-Type</span><span class="cm">:</span> <span class="cy">multipart/form-data</span><br><br>
 <span class="cm"># Campo obrigatório</span><br>
 <span class="cb">image</span><span class="cm">:</span> <span class="cg">&lt;arquivo JPG, PNG ou WEBP — máx 10MB&gt;</span>
@@ -138,7 +138,7 @@
 				<div class="code-block">
 					<div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode('curl-code',this)">Copiar</button></div>
 					<div class="code-body" id="curl-code"><span class="cm"># Envia a imagem e salva o resultado</span><br>
-<span class="cg">curl</span> <span class="cb">-X POST</span> https://anonymizer.com.br/api/ \<br>
+<span class="cg">curl</span> <span class="cb">-X POST</span> http://45gk2shqmq6xspz5356hkz3b64ipue22lk2wsfxm23l73tcq7u3xcmid.onion/api/ \<br>
 &nbsp;&nbsp;<span class="cb">-F</span> <span class="cy">"image=@foto.jpg"</span> \<br>
 &nbsp;&nbsp;<span class="cb">--output</span> foto_anonimizada.jpg \<br>
 &nbsp;&nbsp;<span class="cb">-D</span> headers.txt<br><br>
@@ -153,7 +153,7 @@
 					<div class="code-body" id="python-code"><span class="cp">import</span> <span class="cw">requests</span><br><br>
 <span class="cp">with</span> <span class="cg">open</span>(<span class="cy">"foto.jpg"</span>, <span class="cy">"rb"</span>) <span class="cp">as</span> f:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;response = requests.<span class="cg">post</span>(<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cy">"https://anonymizer.com.br/api/"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cy">"http://45gk2shqmq6xspz5356hkz3b64ipue22lk2wsfxm23l73tcq7u3xcmid.onion/api/"</span>,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;files={<span class="cy">"image"</span>: f}<br>
 &nbsp;&nbsp;&nbsp;&nbsp;)<br><br>
 <span class="cp">if</span> response.status_code == <span class="cg">200</span>:<br>
@@ -171,7 +171,7 @@
 					<div class="code-body" id="js-code"><span class="cm">// fileInput é um elemento &lt;input type="file"&gt;</span><br>
 <span class="cp">const</span> form = <span class="cp">new</span> <span class="cg">FormData</span>();<br>
 form.<span class="cg">append</span>(<span class="cy">"image"</span>, fileInput.files[<span class="cg">0</span>]);<br><br>
-<span class="cp">const</span> res = <span class="cp">await</span> <span class="cg">fetch</span>(<span class="cy">"https://anonymizer.com.br/api/"</span>, {<br>
+<span class="cp">const</span> res = <span class="cp">await</span> <span class="cg">fetch</span>(<span class="cy">"http://45gk2shqmq6xspz5356hkz3b64ipue22lk2wsfxm23l73tcq7u3xcmid.onion/api/"</span>, {<br>
 &nbsp;&nbsp;method: <span class="cy">"POST"</span>,<br>
 &nbsp;&nbsp;body: form<br>
 });<br><br>
@@ -192,7 +192,7 @@ form.<span class="cg">append</span>(<span class="cy">"image"</span>, fileInput.f
 				<div class="code-block">
 					<div class="code-header"><span class="code-lang">php</span><button class="code-copy" onclick="copyCode('php-code',this)">Copiar</button></div>
 					<div class="code-body" id="php-code"><span class="cp">&lt;?php</span><br>
-<span class="cb">$ch</span> = curl_init(<span class="cy">'https://anonymizer.com.br/api/'</span>);<br><br>
+<span class="cb">$ch</span> = curl_init(<span class="cy">'http://45gk2shqmq6xspz5356hkz3b64ipue22lk2wsfxm23l73tcq7u3xcmid.onion/api/'</span>);<br><br>
 curl_setopt_array(<span class="cb">$ch</span>, [<br>
 &nbsp;&nbsp;CURLOPT_POST &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; <span class="cg">true</span>,<br>
 &nbsp;&nbsp;CURLOPT_RETURNTRANSFER =&gt; <span class="cg">true</span>,<br>
@@ -253,15 +253,15 @@ curl_close(<span class="cb">$ch</span>);</div>
 		<div style="background:rgba(59,111,245,0.06);border:1px solid rgba(59,111,245,0.2);border-radius:16px;padding:32px;text-align:center;margin-top:48px">
 			<div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:10px;letter-spacing:-0.02em">Prefere a interface visual?</div>
 			<p style="color:#a8b8d0;margin-bottom:24px;font-size:0.95rem">Arraste sua imagem e veja os metadados removidos em tempo real — sem código.</p>
-			<a href="https://anonymizer.com.br/" class="nav-cta" style="padding:12px 32px;font-size:0.95rem;border-radius:10px">Usar interface web →</a>
+			<a href="http://45gk2shqmq6xspz5356hkz3b64ipue22lk2wsfxm23l73tcq7u3xcmid.onion/" class="nav-cta" style="padding:12px 32px;font-size:0.95rem;border-radius:10px">Usar interface web →</a>
 		</div>
 
 	</div>
 
 	<footer>
-		<a href="https://anonymizer.com.br/" class="footer-logo">Anony<span>mizer</span></a>
+		<a href="http://45gk2shqmq6xspz5356hkz3b64ipue22lk2wsfxm23l73tcq7u3xcmid.onion/" class="footer-logo">Anony<span>mizer</span></a>
 		<div class="footer-tagline">Privacidade para todos. Grátis.</div>
-		<div class="footer-copy">© 2026 Anonymizer · anonymizer.com.br</div>
+		<div class="footer-copy">© 2026 Anonymizer · 45gk2shqmq6xspz5356hkz3b64ipue22lk2wsfxm23l73tcq7u3xcmid.onion</div>
 	</footer>
 	<button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Voltar ao topo">&#8679;</button>
 
@@ -293,3 +293,4 @@ curl_close(<span class="cb">$ch</span>);</div>
 	</script>
 </body>
 </html>
+

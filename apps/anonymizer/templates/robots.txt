@@ -3,11 +3,11 @@ Allow: /
 Disallow: /admin/
 
 # Sitemap
-Sitemap: https://anonymizer.com.br/sitemap.xml
+Sitemap: http://45gk2shqmq6xspz5356hkz3b64ipue22lk2wsfxm23l73tcq7u3xcmid.onion/sitemap.xml
 
 # Arquivo para agentes de IA
-# https://anonymizer.com.br/llms.txt
+# http://45gk2shqmq6xspz5356hkz3b64ipue22lk2wsfxm23l73tcq7u3xcmid.onion/llms.txt
 
 # API REST disponível
-# Endpoint: POST https://anonymizer.com.br/api/
-# Documentação: https://anonymizer.com.br/llms.txt
+# Endpoint: POST http://45gk2shqmq6xspz5356hkz3b64ipue22lk2wsfxm23l73tcq7u3xcmid.onion/api/
+# Documentação: http://45gk2shqmq6xspz5356hkz3b64ipue22lk2wsfxm23l73tcq7u3xcmid.onion/llms.txt
